@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.honeycake.tictactoe.ui.theme.Secondary
 
 /**
  * Created by Aziza Helmy on 7/12/2023.
@@ -16,12 +17,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SelectedBackground(){
        Box(
-        Modifier
-            .clip(RoundedCornerShape(16.dp))
-           // .background(if (isSelected) Secondary else Color.Transparent)
-            .padding(16.dp)
-            .size(width = 91.dp, height = 115.dp)
-    ) {
-
-       }
+           Modifier
+               .clip(RoundedCornerShape(16.dp))
+               .background(Secondary)
+               .padding(16.dp)
+               .size(width = 91.dp, height = 115.dp)
+    ) {}
 }

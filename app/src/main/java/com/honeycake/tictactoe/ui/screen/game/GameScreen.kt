@@ -1,18 +1,16 @@
 package com.honeycake.tictactoe.ui.screen.game
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -72,7 +70,7 @@ fun GameContent(state: GameUiState) {
                 role = painterResource(id = state.secondPlayerUiState.secondPlayerRole)
             )
         }
-      /*  Box(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(350.dp)
@@ -84,36 +82,12 @@ fun GameContent(state: GameUiState) {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Divider(
-                    color = Color.White,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(2.dp)
-                )
-                Divider(
-                    color = Color.White,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(2.dp)
-                )
+            Image(
+                painter = painterResource(id = R.drawable.icon_game_structure),
+                contentDescription = "image structure"
+            )
 
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Divider(color = Color.White, thickness = 2.dp)
-                Divider(color = Color.White, thickness = 2.dp)
-                Divider(color = Color.White, thickness = 2.dp)
-            }
-
-        }*/
+        }
 
     }
 }
