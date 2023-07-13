@@ -21,3 +21,4 @@ data class SecondPlayerUiState(
     val secondPlayerRole: Int = R.drawable.o_icon,
     val secondPlayerImage: Int = R.drawable.gammer2,
 )
+data class ButtonState(var text: String, var enabled: Boolean)

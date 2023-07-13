@@ -10,9 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -86,9 +91,43 @@ fun GameContent(state: GameUiState) {
                 painter = painterResource(id = R.drawable.icon_game_structure),
                 contentDescription = "image structure"
             )
+          //  val buttons = remember { mutableStateListOf<ButtonState>() }
 
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                for (row in 0..2) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        for (col in 0..2) {
+//                            val index = row * 3 + col
+//                            val buttonState by remember { mutableStateOf(buttons[index]) }
+                            Button(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .size(80.dp),
+                                onClick = {
+//                                    if (buttonState.enabled) {
+//                                        buttonState.text = "X" // Change "X" to "O" for the second player's turn
+//                                        buttonState.enabled = false
+//                                    }
+                                },
+                                enabled = true
+                            ) {
+                                Text(text = "2")
+                            }
+                        }
+                    }
+                }
+            }
         }
-
     }
 }
 
