@@ -32,9 +32,9 @@ fun JoinGameScreen() {
     var gameId by remember { mutableStateOf("") }
     JoinGameContent(
         name = name,
-        onNameChange = {name},
+        onNameChange = { name },
         gameId = gameId,
-        onGameIdChange = {gameId},
+        onGameIdChange = { gameId },
     )
 }
 
@@ -62,9 +62,19 @@ fun JoinGameContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                EditTextFile(text = name, hint = stringResource(R.string.enter_your_name),onChange = onNameChange)
+                EditTextFile(
+                    text = name,
+                    hint = stringResource(R.string.enter_your_name),
+                    placeHolder = "Ex: John",
+                    onChange = onNameChange
+                )
                 SpacerVertical16()
-                EditTextFile(text = gameId, hint = stringResource(R.string.your_game_id),onChange = onGameIdChange)
+                EditTextFile(
+                    text = gameId,
+                    hint = stringResource(R.string.your_game_id),
+                    placeHolder = "Ex: fcj54nd",
+                    onChange = onGameIdChange
+                )
                 SpacerVertical52()
                 ButtonItem(text = stringResource(R.string.join_game))
             }

@@ -45,7 +45,12 @@ fun CreateGameContent(name: String, onNameChange: (String) -> Unit) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             GameTitle()
-            EditTextFile(text = name, hint = stringResource(R.string.enter_your_name), onChange = onNameChange)
+            EditTextFile(
+                text = name,
+                hint = stringResource(R.string.enter_your_name),
+                placeHolder = "Ex: John",
+                onChange = onNameChange
+            )
             ButtonItem(text = stringResource(R.string.create_game))
         }
     }
@@ -53,6 +58,6 @@ fun CreateGameContent(name: String, onNameChange: (String) -> Unit) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewCreateGame(){
+fun PreviewCreateGame() {
     CreateGameScreen()
 }

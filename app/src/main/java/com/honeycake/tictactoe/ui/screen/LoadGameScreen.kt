@@ -70,7 +70,9 @@ fun LoadGameContent(
                     hint = "",
                     onChange = onGameIdChange,
                     isLeadingIcon = true,
-                    onClickLeadingIcon = {}
+                    onClickLeadingIcon = {},
+                    readOnly = true,
+                    textStyle = Typography.titleSmall
                 )
             }
             Image(

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
     <string name="waiting_sentence">Waiting for your player to join .........</string>
-    <string name="your_game_id">Your Game Id</string>
+    <string name="your_game_id">Your Game ID:</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="create_game">Create Game</string>
     <string name="join_game">Join Game</string>
