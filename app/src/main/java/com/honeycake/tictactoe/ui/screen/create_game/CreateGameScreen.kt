@@ -57,7 +57,7 @@ fun CreateGameContent(
                 placeHolder = "Ex: John",
                 onChange = onNameChange
             )
-            ButtonItem(text = stringResource(R.string.create_game), onClick = onClickCreateGame)
+            ButtonItem(text = stringResource(R.string.create_game), onClick = { onClickCreateGame })
         }
     }
 }

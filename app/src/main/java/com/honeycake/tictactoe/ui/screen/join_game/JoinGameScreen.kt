@@ -20,8 +20,6 @@ import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
-import com.honeycake.tictactoe.ui.composable.spacing.padding_vertical.SpacerVertical16
-import com.honeycake.tictactoe.ui.composable.spacing.padding_vertical.SpacerVertical52
 
 @Composable
 fun JoinGameScreen(
@@ -61,7 +59,7 @@ fun JoinGameContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 30.dp),
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -69,16 +67,16 @@ fun JoinGameContent(
                     text = name,
                     hint = stringResource(R.string.enter_your_name),
                     placeHolder = "Ex: John",
-                    onChange = onNameChange
+                    onChange = onNameChange,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
-                SpacerVertical16()
                 EditTextFile(
                     text = gameId,
                     hint = stringResource(R.string.your_game_id),
                     placeHolder = "Ex: fcj54nd",
-                    onChange = onGameIdChange
+                    onChange = onGameIdChange,
+                    modifier = Modifier.padding(bottom = 64.dp)
                 )
-                SpacerVertical52()
                 ButtonItem(text = stringResource(R.string.join_game), onClick = onClickJoinGame)
             }
 

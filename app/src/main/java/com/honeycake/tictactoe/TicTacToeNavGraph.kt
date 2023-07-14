@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.screen.create_game.CreateGameScreen
-import com.honeycake.tictactoe.ui.screen.create_game.LoadGameScreen
+import com.honeycake.tictactoe.ui.screen.load_game.LoadGameScreen
 import com.honeycake.tictactoe.ui.screen.game.GameScreen
 import com.honeycake.tictactoe.ui.screen.join_game.JoinGameScreen
 import com.honeycake.tictactoe.ui.screen.start.HomeScreen
