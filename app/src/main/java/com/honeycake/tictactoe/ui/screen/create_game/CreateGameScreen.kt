@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,10 +21,10 @@ import com.honeycake.tictactoe.ui.composable.GameTitle
 
 @Composable
 fun CreateGameScreen(
-    navigateToLoadGame: () -> Unit
+    navigateToLoadGame: () -> Unit,
 ) {
     // This will be replace with stat of view model
-    var name by remember { mutableStateOf("") }
+    val name by remember { mutableStateOf("") }
     CreateGameContent(
         name = name,
         onNameChange = { name },
@@ -57,7 +56,7 @@ fun CreateGameContent(
                 placeHolder = "Ex: John",
                 onChange = onNameChange
             )
-            ButtonItem(text = stringResource(R.string.create_game), onClick = { onClickCreateGame })
+            ButtonItem(text = stringResource(R.string.create_game), onClick = onClickCreateGame)
         }
     }
 }

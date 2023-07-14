@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,8 +26,8 @@ fun JoinGameScreen(
 ) {
 
     // This will be replace with stat of view model
-    var name by remember { mutableStateOf("") }
-    var gameId by remember { mutableStateOf("") }
+    val name by remember { mutableStateOf("") }
+    val gameId by remember { mutableStateOf("") }
     JoinGameContent(
         name = name,
         onNameChange = { name },
