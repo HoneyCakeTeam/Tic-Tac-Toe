@@ -1,7 +1,8 @@
 package com.honeycake.tictactoe.ui.composable
 
 
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +36,7 @@ fun EditTextFile(
     onClickLeadingIcon: () -> Unit = {},
 ) {
     OutlinedTextField(
-        modifier = modifier.size(width = 328.dp, height = 64.dp),
+        modifier = modifier.fillMaxWidth().height(64.dp),
         value = text,
         onValueChange = onChange,
         label = {

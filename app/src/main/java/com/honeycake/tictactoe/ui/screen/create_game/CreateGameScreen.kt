@@ -1,5 +1,6 @@
 package com.honeycake.tictactoe.ui.screen.create_game
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.firebase.database.FirebaseDatabase
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.Request
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
@@ -57,7 +60,13 @@ fun CreateGameContent(
                 placeHolder = "Ex: John",
                 onChange = onNameChange
             )
-            ButtonItem(text = stringResource(R.string.create_game), onClick = onClickCreateGame)
+            ButtonItem(text = stringResource(R.string.create_game),
+                onClick = {
+                    Log.e("TagTag", "mmmmmmmmm")
+                    val request = Request(firstPlayerName = "Aziza", secondPlayerName = "Menna" , isGameStarted = false)
+                    FirebaseDatabase.getInstance().getReference("Request").push().setValue(request)
+                }
+            )
         }
     }
 }
