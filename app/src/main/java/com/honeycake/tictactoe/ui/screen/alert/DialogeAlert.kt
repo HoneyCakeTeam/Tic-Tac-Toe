@@ -1,5 +1,6 @@
-package com.honeycake.tictactoe.ui.screen.game.composable
+package com.honeycake.tictactoe.ui.screen.alert
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +27,7 @@ import com.honeycake.tictactoe.ui.theme.Typography
  * Created by Aziza Helmy on 7/13/2023.
  */
 @Composable
-fun CustomAlertDialog(
+fun DialogAlert(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onButtonClicked: () -> Unit
@@ -69,7 +69,7 @@ fun CustomAlertDialog(
                         .fillMaxWidth()
                         .padding(4.dp), horizontalArrangement = Arrangement.Center
                 ) {
-                    Icon(
+                    Image(
                         painter = painterResource(id = R.drawable.google),
                         contentDescription = "",
                         modifier = Modifier.size(24.dp)
@@ -84,5 +84,5 @@ fun CustomAlertDialog(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewCustomAlertDialog() {
-    CustomAlertDialog(onDismiss = {}, onButtonClicked = {})
+    DialogAlert(onDismiss = {}, onButtonClicked = {})
 }
