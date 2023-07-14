@@ -65,10 +65,10 @@ fun PlayerDetails(
                 modifier = Modifier.padding(top = 24.dp),
                 style = Typography.labelSmall
             )
-            Icon(
+            Image(
                 painter = role,
                 contentDescription = "x icon",
-                tint = if (role == painterResource(id = R.drawable.x_icon)) Color.Red else Color.White,
+                //tint = if (role == painterResource(id = R.drawable.x_icon)) Color.Red else Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }
