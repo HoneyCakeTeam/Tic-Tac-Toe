@@ -88,9 +88,6 @@ dependencies {
 
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.31.5-beta'
 
-    //splash
-    implementation "androidx.core:core-splashscreen:1.0.1"
-
 }
 
 kapt {
