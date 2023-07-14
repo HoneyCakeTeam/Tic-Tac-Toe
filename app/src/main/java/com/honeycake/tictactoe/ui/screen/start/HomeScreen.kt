@@ -1,4 +1,4 @@
-package com.honeycake.tictactoe.ui.screen
+package com.honeycake.tictactoe.ui.screen.start
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
