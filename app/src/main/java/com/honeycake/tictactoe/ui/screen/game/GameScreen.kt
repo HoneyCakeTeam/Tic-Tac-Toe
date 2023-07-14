@@ -24,7 +24,7 @@ fun GameScreen() {
 }
 
 @Composable
-fun GameContent(gameUiState: GameUiState, onButtonClicked: (Int) -> Unit) {
+fun GameContent(gameUiState: GameUiState, onButtonClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +35,7 @@ fun GameContent(gameUiState: GameUiState, onButtonClicked: (Int) -> Unit) {
             modifier = Modifier.padding(16.dp)
         ) {}
         PlayersInfo(gameUiState)
-        GameBoard(gameUiState, onButtonClicked)
+        GameBoard(gameUiState, onButtonClicked = onButtonClicked)
     }
 }
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.screen.game.GameUiState
@@ -29,7 +31,7 @@ import com.honeycake.tictactoe.ui.screen.game.GameUiState
 @Composable
 fun GameBoard(
     state: GameUiState,
-    onButtonClicked: (Int) -> Unit
+    onButtonClicked: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -43,38 +45,45 @@ fun GameBoard(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.icon_game_structure),
-            contentDescription = "image structure"
-        )
+
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
             for (row in 0..2) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f).aspectRatio(1f)
                 ) {
                     for (col in 0..2) {
                         val index = row * 3 + col
-                        Log.e("TAG", "GameBoard:$index ", )
+
                         val buttonState = state.gameState[index]
-                        buttonState.image?.let {
-                            GameCell(image = it, onButtonClicked = {
-                                Log.e("TAG", "GameCell:${index} ")
-                                        onButtonClicked(index)
-                            })
-                        }
+                        GameCell(onButtonClicked = {
+                            Log.e("TAG", "GameCell:${index} ")
+                            onButtonClicked()
+                        }, image = R.drawable.x_icon)
                     }
                 }
             }
         }
+
+        Image(
+            painter = painterResource(id = R.drawable.icon_game_structure),
+            contentDescription = "image structure"
+        )
     }
+}
+
+@Preview
+@Composable
+fun PreviewGameBoard() {
+    GameBoard(state = GameUiState(), onButtonClicked = {})
 }
 

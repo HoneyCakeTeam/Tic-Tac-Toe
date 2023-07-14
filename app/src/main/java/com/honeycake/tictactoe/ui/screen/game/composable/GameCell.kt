@@ -1,8 +1,7 @@
 package com.honeycake.tictactoe.ui.screen.game.composable
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -17,15 +16,17 @@ import com.honeycake.tictactoe.R
  * Created by Aziza Helmy on 7/14/2023.
  */
 @Composable
-fun GameCell(image: Int, isEnabled: Boolean = true, onButtonClicked: (Int) -> Unit) {
-//    Column(modifier = Modifier
-//
-//    ) {
+fun GameCell(
+    image: Int,
+    isEnabled: Boolean = true,
+    onButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
     Button(
-        modifier = Modifier
-            .padding(4.dp)
-            .size(80.dp),
-        onClick = { onButtonClicked },
+        modifier = Modifier,
+        shape = RoundedCornerShape(0.dp),
+        onClick = onButtonClicked,
         enabled = isEnabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
@@ -34,7 +35,6 @@ fun GameCell(image: Int, isEnabled: Boolean = true, onButtonClicked: (Int) -> Un
     ) {
         Image(painter = painterResource(id = image), contentDescription = "")
     }
-    // }
 }
 
 @Preview(showSystemUi = true)
