@@ -20,10 +20,10 @@ import com.honeycake.tictactoe.ui.composable.spacing.padding_vertical.SpacerVert
 
 @Composable
 fun HomeScreen(
-    onClickCreateButton: () -> Unit,
-    onClickJoinButton: () -> Unit,
+    navigateToCreateGame: () -> Unit,
+    navigateToJoinGame: () -> Unit,
 ) {
-    HomeContent(onClickCreateButton, onClickJoinButton)
+    HomeContent(navigateToCreateGame, navigateToJoinGame)
 }
 
 @Composable

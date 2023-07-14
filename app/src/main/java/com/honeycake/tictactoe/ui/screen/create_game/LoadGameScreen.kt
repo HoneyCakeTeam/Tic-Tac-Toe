@@ -29,6 +29,7 @@ import com.honeycake.tictactoe.ui.theme.Typography
 
 @Composable
 fun LoadGameScreen() {
+    //ToDo: when two players become in the load screen the game started and navigate to game screen
     // This will be replace with view model
     var gameId by remember { mutableStateOf("") }
     LoadGameContent(
