@@ -6,22 +6,16 @@ import com.honeycake.tictactoe.R
  * Created by Aziza Helmy on 7/12/2023.
  */
 data class GameUiState(
-    val firstPlayerUiState: FirstPlayerUiState = FirstPlayerUiState(),
-    val secondPlayerUiState: SecondPlayerUiState = SecondPlayerUiState(),
+    val firstPlayerUiState: PlayerUiState = PlayerUiState(),
+    val secondPlayerUiState: PlayerUiState = PlayerUiState(),
     val gameState: List<ButtonState> = List(9) { ButtonState(null, true) }
 )
 
 
-data class FirstPlayerUiState(
-    val firstPlayerName: String = "Aziza",
-    val firstPlayerRole: Int = R.drawable.x_icon,
-    val firstPlayerImage: Int = R.drawable.gamer,
-)
-
-data class SecondPlayerUiState(
-    val secondPlayerName: String = "Menna",
-    val secondPlayerRole: Int = R.drawable.o_icon,
-    val secondPlayerImage: Int = R.drawable.gammer2,
+data class PlayerUiState(
+    val playerName: String = "Aziza",
+    val playerRole: Int = R.drawable.x_icon,
+    val playerImage: Int = R.drawable.gamer,
 )
 
 data class ButtonState(var image: Int? = null, var enabled: Boolean = true)
