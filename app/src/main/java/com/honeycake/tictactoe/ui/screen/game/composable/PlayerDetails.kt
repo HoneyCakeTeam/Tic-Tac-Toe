@@ -68,7 +68,6 @@ fun PlayerDetails(
             Image(
                 painter = role,
                 contentDescription = "x icon",
-                //tint = if (role == painterResource(id = R.drawable.x_icon)) Color.Red else Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }
