@@ -30,6 +30,7 @@ data class PlayerUiState(
     val playerName: String = "Aziza",
     val playerRole: Int = R.drawable.x_icon,
     val playerImage: Int = R.drawable.gamer,
+    val isWinner: Boolean = false
 )
 
-data class ButtonState(var image: Int? = null, var enabled: Boolean = true)
+data class ButtonState(var image: Int?, var enabled: Boolean = true)
