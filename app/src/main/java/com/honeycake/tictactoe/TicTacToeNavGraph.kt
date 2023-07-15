@@ -22,7 +22,7 @@ fun TicTacToeNavGraph() {
         }
         composable(Screens.CreateGame.route){
             CreateGameScreen(
-                navigateToLoadGame = { navController.navigate(Screens.LoadGame.route) }
+                navigateToGame = { navController.navigate(Screens.Game.route) }
             )
         }
         composable(Screens.JoinGame.route){
