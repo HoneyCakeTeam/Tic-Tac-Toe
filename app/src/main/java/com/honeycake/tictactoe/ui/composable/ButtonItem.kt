@@ -21,7 +21,7 @@ import com.honeycake.tictactoe.ui.theme.Typography
 fun ButtonItem(
     modifier: Modifier = Modifier,
     text: String,
-    isEnabled: Boolean,
+    isEnabled: Boolean=true,
     onClick: () -> Unit = {}
 ) {
     val horizontalGradientBrush = Brush.verticalGradient(
