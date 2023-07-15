@@ -1,4 +1,4 @@
-package com.honeycake.tictactoe.ui.screen.start
+package com.honeycake.tictactoe.ui.screen.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,20 +13,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
+import com.honeycake.tictactoe.ui.screen.create_game.navigateToCreate
+import com.honeycake.tictactoe.ui.screen.join_game.navigateToJoin
 
 @Composable
-fun HomeScreen(
-    navigateToCreateGame: () -> Unit,
-    navigateToJoinGame: () -> Unit,
-) {
-    HomeContent(navigateToCreateGame, navigateToJoinGame)
+fun HomeScreen() {
+    val navController = LocalNavigationProvider.current
+    HomeContent({ navController.navigateToCreate() }, { navController.navigateToJoin() })
 }
 
 @Composable
-fun HomeContent(
+private fun HomeContent(
     onClickCreateButton: () -> Unit,
     onClickJoinButton: () -> Unit,
 ) {
@@ -41,10 +42,14 @@ fun HomeContent(
         ) {
             GameTitle()
             Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp)
             ) {
-                ButtonItem(text = stringResource(R.string.create_game),
-                    onClick = onClickCreateButton, modifier = Modifier.padding(bottom = 16.dp))
+                ButtonItem(
+                    text = stringResource(R.string.create_game),
+                    onClick = onClickCreateButton, modifier = Modifier.padding(bottom = 16.dp)
+                )
                 ButtonItem(text = stringResource(R.string.join_game), onClick = onClickJoinButton)
             }
         }
@@ -54,5 +59,5 @@ fun HomeContent(
 @Preview
 @Composable
 fun PreviewHome() {
-    HomeScreen({},{})
+    HomeScreen()
 }

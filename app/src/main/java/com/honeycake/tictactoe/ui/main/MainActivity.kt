@@ -1,4 +1,4 @@
-package com.honeycake.tictactoe
+package com.honeycake.tictactoe.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

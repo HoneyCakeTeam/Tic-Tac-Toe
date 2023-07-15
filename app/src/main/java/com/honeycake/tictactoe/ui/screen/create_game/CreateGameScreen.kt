@@ -14,26 +14,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 
 @Composable
-fun CreateGameScreen(
-    navigateToLoadGame: () -> Unit,
-) {
+fun CreateGameScreen() {
     // This will be replace with stat of view model
+    val navController = LocalNavigationProvider.current
     val name by remember { mutableStateOf("") }
     CreateGameContent(
         name = name,
         onNameChange = { name },
-        onClickCreateGame = navigateToLoadGame
+        onClickCreateGame = { navController.navigateToLoad() }
     )
 }
 
 @Composable
-fun CreateGameContent(
+private fun CreateGameContent(
     name: String,
     onNameChange: (String) -> Unit,
     onClickCreateGame: () -> Unit

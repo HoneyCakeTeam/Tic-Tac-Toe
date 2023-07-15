@@ -15,36 +15,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 
 @Composable
-fun JoinGameScreen(
-    navigateToLoadGame: () -> Unit
-) {
+fun JoinGameScreen() {
 
     // This will be replace with stat of view model
     val name by remember { mutableStateOf("") }
     val gameId by remember { mutableStateOf("") }
+    val navController = LocalNavigationProvider.current
     JoinGameContent(
         name = name,
         onNameChange = { name },
         gameId = gameId,
         onGameIdChange = { gameId },
-        onClickJoinGame = navigateToLoadGame
+        onClickJoinGame = { navController.navigateToLoad() }
     )
 }
 
 @Composable
-fun JoinGameContent(
+private fun JoinGameContent(
     name: String,
     onNameChange: (String) -> Unit,
     gameId: String,
     onGameIdChange: (String) -> Unit,
     onClickJoinGame: () -> Unit
 ) {
+    val navController = LocalNavigationProvider.current
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.IconBack
 import com.honeycake.tictactoe.ui.screen.game.composable.GameBoard
 import com.honeycake.tictactoe.ui.screen.game.composable.PlayersInfo
@@ -24,7 +25,9 @@ fun GameScreen() {
 }
 
 @Composable
-fun GameContent(gameUiState: GameUiState, onButtonClicked: () -> Unit) {
+private fun GameContent(gameUiState: GameUiState, onButtonClicked: () -> Unit) {
+    // this will be an event in view model 'onCLickBackButton()'
+    val navController = LocalNavigationProvider.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,7 +36,7 @@ fun GameContent(gameUiState: GameUiState, onButtonClicked: () -> Unit) {
         IconBack(
             painter = painterResource(id = R.drawable.arrow_left),
             modifier = Modifier.padding(16.dp)
-        ) {}
+        ) {navController.popBackStack()}
         PlayersInfo(gameUiState)
         GameBoard(gameUiState, onButtonClicked = onButtonClicked)
     }
