@@ -1,4 +1,4 @@
-package com.honeycake.tictactoe.ui.screen.home
+package com.honeycake.tictactoe.ui.screen.start
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,15 +42,11 @@ private fun HomeContent(
         ) {
             GameTitle()
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 30.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp)
             ) {
-                ButtonItem(
-                    text = stringResource(R.string.create_game),
-                    onClick = onClickCreateButton, modifier = Modifier.padding(bottom = 16.dp)
-                )
-                ButtonItem(text = stringResource(R.string.join_game), onClick = onClickJoinButton)
+                ButtonItem(text = stringResource(R.string.create_game), isEnabled = true,
+                    onClick = onClickCreateButton, modifier = Modifier.padding(bottom = 16.dp))
+                ButtonItem(text = stringResource(R.string.join_game), isEnabled = true,onClick = onClickJoinButton)
             }
         }
     }
@@ -59,5 +55,5 @@ private fun HomeContent(
 @Preview
 @Composable
 fun PreviewHome() {
-    HomeScreen()
+    HomeScreen({},{})
 }

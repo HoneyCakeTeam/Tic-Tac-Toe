@@ -78,7 +78,7 @@ private fun JoinGameContent(
                     onChange = onGameIdChange,
                     modifier = Modifier.padding(bottom = 64.dp)
                 )
-                ButtonItem(text = stringResource(R.string.join_game), onClick = onClickJoinGame)
+                ButtonItem(text = stringResource(R.string.join_game), isEnabled = true,onClick = onClickJoinGame)
             }
 
         }
