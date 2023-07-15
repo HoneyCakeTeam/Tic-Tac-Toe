@@ -31,7 +31,7 @@ import com.honeycake.tictactoe.ui.screen.game.GameUiState
 @Composable
 fun GameBoard(
     state: GameUiState,
-    onButtonClicked: () -> Unit
+    onButtonClicked: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -65,10 +65,12 @@ fun GameBoard(
                         val index = row * 3 + col
 
                         val buttonState = state.gameState[index]
-                        GameCell(onButtonClicked = {
-                            Log.e("TAG", "GameCell:${index} ")
-                            onButtonClicked()
-                        }, image = R.drawable.x_icon)
+                        buttonState.image?.let {
+                            GameCell(onButtonClicked = {
+                                Log.e("TAG", "GameCell:${index} ")
+                                onButtonClicked(index)
+                            }, image = it, isEnabled = buttonState.enabled)
+                        }
                     }
                 }
             }
