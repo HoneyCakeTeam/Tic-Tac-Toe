@@ -34,15 +34,12 @@ fun LoadGameScreen() {
     var gameId by remember { mutableStateOf("") }
     LoadGameContent(
         gameId = gameId,
-        onGameIdChange = { gameId },
     )
 }
 
 @Composable
-fun LoadGameContent(
-    gameId: String,
-    onGameIdChange: (String) -> Unit
-) {
+private fun LoadGameContent(gameId: String)
+{
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -61,7 +58,9 @@ fun LoadGameContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.Start).padding(start = 12.dp),
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(start = 12.dp),
                     text = stringResource(R.string.your_game_id),
                     style = Typography.titleMedium,
                     color = TextColor
@@ -69,7 +68,6 @@ fun LoadGameContent(
                 EditTextFile(
                     text = gameId,
                     hint = "",
-                    onChange = onGameIdChange,
                     isLeadingIcon = true,
                     onClickLeadingIcon = {},
                     readOnly = true,
