@@ -43,9 +43,9 @@ fun HomeContent(
             Column(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp)
             ) {
-                ButtonItem(text = stringResource(R.string.create_game),
+                ButtonItem(text = stringResource(R.string.create_game), isEnabled = true,
                     onClick = onClickCreateButton, modifier = Modifier.padding(bottom = 16.dp))
-                ButtonItem(text = stringResource(R.string.join_game), onClick = onClickJoinButton)
+                ButtonItem(text = stringResource(R.string.join_game), isEnabled = true,onClick = onClickJoinButton)
             }
         }
     }

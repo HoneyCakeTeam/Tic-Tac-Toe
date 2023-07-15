@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
@@ -21,21 +21,21 @@ import com.honeycake.tictactoe.ui.composable.GameTitle
 
 @Composable
 fun CreateGameScreen(
-    navigateToLoadGame: () -> Unit,
+    viewModel: CreateGameViewModel = hiltViewModel(),
+    navigateToGame: () -> Unit,
 ) {
-    // This will be replace with stat of view model
-    val name by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsState()
     CreateGameContent(
-        name = name,
-        onNameChange = { name },
-        onClickCreateGame = navigateToLoadGame
+        state = state,
+        onChangePlayerName = viewModel::onChangePlayerName,
+        onClickCreateGame = navigateToGame
     )
 }
 
 @Composable
 fun CreateGameContent(
-    name: String,
-    onNameChange: (String) -> Unit,
+    state: CreateGameUiState,
+    onChangePlayerName: (String) -> Unit,
     onClickCreateGame: () -> Unit
 ) {
     Box(
@@ -51,12 +51,16 @@ fun CreateGameContent(
         ) {
             GameTitle()
             EditTextFile(
-                text = name,
+                text = state.firstPlayerName,
                 hint = stringResource(R.string.enter_your_name),
                 placeHolder = "Ex: John",
-                onChange = onNameChange
+                onChange = onChangePlayerName
             )
-            ButtonItem(text = stringResource(R.string.create_game), onClick = onClickCreateGame)
+            ButtonItem(
+                text = stringResource(R.string.create_game),
+                isEnabled = state.isButtonEnabled,
+                onClick = onClickCreateGame
+            )
         }
     }
 }
