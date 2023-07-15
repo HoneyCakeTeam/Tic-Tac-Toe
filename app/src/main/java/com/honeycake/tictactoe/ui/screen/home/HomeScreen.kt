@@ -1,4 +1,4 @@
-package com.honeycake.tictactoe.ui.screen.start
+package com.honeycake.tictactoe.ui.screen.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,5 +55,5 @@ private fun HomeContent(
 @Preview
 @Composable
 fun PreviewHome() {
-    HomeScreen({},{})
+    HomeScreen()
 }

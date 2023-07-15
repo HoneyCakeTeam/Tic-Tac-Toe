@@ -22,13 +22,12 @@ import com.honeycake.tictactoe.ui.composable.GameTitle
 @Composable
 fun CreateGameScreen(
     viewModel: CreateGameViewModel = hiltViewModel(),
-    navigateToGame: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     CreateGameContent(
         state = state,
         onChangePlayerName = viewModel::onChangePlayerName,
-        onClickCreateGame = navigateToGame
+        onClickCreateGame = { }
     )
 }
 
