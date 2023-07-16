@@ -6,9 +6,10 @@ import com.honeycake.tictactoe.R
  * Created by Aziza Helmy on 7/12/2023.
  */
 data class GameUiState(
+    val isTied: Boolean = false,
     val firstPlayerUiState: PlayerUiState = PlayerUiState(),
     val secondPlayerUiState: PlayerUiState = PlayerUiState(),
-    val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
+    val gameState: List<ButtonState> = List(10) { ButtonState(null, true)},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
         listOf(3, 4, 5),
@@ -33,4 +34,4 @@ data class PlayerUiState(
     val isWinner: Boolean = false
 )
 
-data class ButtonState(var image: Int?, var enabled: Boolean = true)
+data class ButtonState(var image: Int? = null, var enabled: Boolean = true)
