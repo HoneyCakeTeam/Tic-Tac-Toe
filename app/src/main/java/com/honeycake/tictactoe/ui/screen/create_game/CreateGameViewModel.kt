@@ -37,7 +37,7 @@ class CreateGameViewModel @Inject constructor(
     private fun onError(throwable: Throwable) {
         // do later
     }
-    private fun generateUniqueKey(): String {
+     fun generateUniqueKey(): String {
         val dateFormat = SimpleDateFormat("MMddHHmmss", Locale.getDefault())
         val timestamp = dateFormat.format(Date())
         val randomNumber = (0..99999).random().toString().padStart(5, '0')
