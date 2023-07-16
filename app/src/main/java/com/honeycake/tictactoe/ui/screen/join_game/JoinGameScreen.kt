@@ -34,7 +34,7 @@ fun JoinGameScreen() {
         onNameChange = { name },
         gameId = gameId,
         onGameIdChange = { gameId },
-        onClickJoinGame = { navController.navigateToLoad() }
+        onClickJoinGame = { navController.navigateToLoad("") }
     )
 }
 

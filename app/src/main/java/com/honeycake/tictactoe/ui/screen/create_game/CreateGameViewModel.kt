@@ -1,8 +1,12 @@
 package com.honeycake.tictactoe.ui.screen.create_game
 
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.honeycake.tictactoe.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -13,30 +17,32 @@ class CreateGameViewModel @Inject constructor(
     private val XORepository: XORepository
 ) : BaseViewModel<CreateGameUiState>(CreateGameUiState()), CreateGameInteractionListeners {
 
-    init {
-        tryToExecute(
-            callee = { onCreateGameClicked("Tarek") },
-            onError = ::onError,
-            onSuccess = ::onSuccess
-        )
-    }
     fun onChangePlayerName(newValue: String) {
         updateState { it.copy(firstPlayerName = newValue, isButtonEnabled = true) }
     }
 
-    private suspend fun onCreateGameClicked(firstPlayerName: String): String {
-        val gameSession = GameSession(firstPlayerName, "", false, generateUniqueKey())
-        XORepository.saveGameSession(gameSession)
-        return "Done"
+    override fun onCreateGameClicked(navController: NavController) {
+        if (state.value.firstPlayerName.isNotEmpty()) {
+            saveGameSession()
+            navController.navigateToLoad(_state.value.gameId)
+        } else
+            "Dummy"
+            // must be replaced with toast show that he must enter a name
     }
 
-    private fun onSuccess(result: String) {
-        // do later
+    private fun saveGameSession() {
+        updateState { it.copy(gameId = generateUniqueKey()) }
+        val gameSession = GameSession(
+            _state.value.firstPlayerName,
+            "",
+            false,
+            _state.value.gameId
+        )
+        viewModelScope.launch {
+            XORepository.saveGameSession(gameSession)
+        }
     }
 
-    private fun onError(throwable: Throwable) {
-        // do later
-    }
     private fun generateUniqueKey(): String {
         val dateFormat = SimpleDateFormat("MMddHHmmss", Locale.getDefault())
         val timestamp = dateFormat.format(Date())
