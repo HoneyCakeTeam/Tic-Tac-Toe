@@ -29,14 +29,14 @@ import com.honeycake.tictactoe.ui.theme.Typography
  */
 @Composable
 fun PlayerDetails(
-    image: Painter= painterResource(id = R.drawable.gammer2),
-    name: String="",
-    role: Painter= painterResource(id = R.drawable.x_icon),
-    isSelected: Boolean = false,
     modifier: Modifier = Modifier,
+    image: Painter = painterResource(id = R.drawable.gammer2),
+    name: String = "",
+    role: Painter = painterResource(id = R.drawable.x_icon),
+    isSelected: Boolean = false,
 ) {
     Box(
-        Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(if (isSelected) Secondary else Color.Transparent)
             .padding(16.dp)
