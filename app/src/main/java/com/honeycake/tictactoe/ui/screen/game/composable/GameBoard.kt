@@ -59,18 +59,20 @@ fun GameBoard(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f).aspectRatio(1f)
+                        .weight(1f)
+                        .aspectRatio(1f)
                 ) {
                     for (col in 0..2) {
                         val index = row * 3 + col
-
                         val buttonState = state.gameState[index]
-                        buttonState.image?.let {
-                            GameCell(onButtonClicked = {
+                        GameCell(
+                            onButtonClicked = {
                                 Log.e("TAG", "GameCell:${index} ")
                                 onButtonClicked(index)
-                            }, image = it, isEnabled = buttonState.enabled)
-                        }
+                            },
+                            painter = painterResource(id = buttonState.image ?: R.drawable.x_icon),
+                            isEnabled = buttonState.enabled
+                        )
                     }
                 }
             }
