@@ -40,11 +40,17 @@ class GameViewModel @Inject constructor() : ViewModel() {
                     secondPlayerUiState = updatedWinner.secondPlayerUiState
                 )
                 Log.d("GameViewModel", "Player ${winner.playerName} wins!")
+            }else if (isGameTied(updatedState)) {
+                _state.value = updatedState.copy(isTied = true)
+                Log.d("GameViewModel", "The game is tied!")
             }
         }
 
     }
 
+    private fun isGameTied(currentState: GameUiState): Boolean {
+        return currentState.gameState.none { it.enabled }
+    }
     private fun updateButtonState(buttonState: ButtonState, playerRole: Int) {
         buttonState.enabled = false
         buttonState.image = playerRole
