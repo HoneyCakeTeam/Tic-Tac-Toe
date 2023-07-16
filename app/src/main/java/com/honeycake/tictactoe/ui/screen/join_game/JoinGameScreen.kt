@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
-import com.honeycake.tictactoe.ui.composable.EditTextFile
+import com.honeycake.tictactoe.ui.composable.EditTextFiled
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
 import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
@@ -64,14 +64,14 @@ private fun JoinGameContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                EditTextFile(
+                EditTextFiled(
                     text = name,
                     hint = stringResource(R.string.enter_your_name),
                     placeHolder = "Ex: John",
                     onChange = onNameChange,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                EditTextFile(
+                EditTextFiled(
                     text = gameId,
                     hint = stringResource(R.string.your_game_id),
                     placeHolder = "Ex: fcj54nd",
