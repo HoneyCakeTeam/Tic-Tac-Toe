@@ -2,7 +2,7 @@ package com.honeycake.tictactoe.ui.screen.create_game
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.honeycake.tictactoe.repository.XORepository
+import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
 import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +21,7 @@ class CreateGameViewModel @Inject constructor(
         updateState { it.copy(firstPlayerName = newValue, isButtonEnabled = true) }
     }
 
+    //This should be replaced instead of passing navController
     override fun onCreateGameClicked(navController: NavController) {
         if (state.value.firstPlayerName.isNotEmpty()) {
             saveGameSession()

@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -19,20 +22,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
+import com.honeycake.tictactoe.ui.screen.game.navigateToGame
 import com.honeycake.tictactoe.ui.theme.TextColor
 import com.honeycake.tictactoe.ui.theme.Typography
+
 
 @Composable
 fun LoadGameScreen(
     viewModel: LoadViewModel = hiltViewModel()
 ) {
     val localClipboardManager = LocalClipboardManager.current
-    val gameId = viewModel.args.gameId
+    val navController = LocalNavigationProvider.current
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(state.isSecondPlayerJoined) {
+        if (state.isSecondPlayerJoined) {
+            navController.navigateToGame(state.gameId)
+        }
+    }
+
+
     LoadGameContent(
-        gameId = gameId!!,
+        gameId = state.gameId,
         onClickCopyIcon = { viewModel.onClickCopyIcon(localClipboardManager) })
 }
 
