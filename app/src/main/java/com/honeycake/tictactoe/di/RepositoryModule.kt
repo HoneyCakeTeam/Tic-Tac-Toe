@@ -1,7 +1,7 @@
 package com.honeycake.tictactoe.di
 
-import com.honeycake.tictactoe.repository.XORepository
-import com.honeycake.tictactoe.repository.XORepositoryImpl
+import com.honeycake.tictactoe.domain.repository.XORepository
+import com.honeycake.tictactoe.domain.repository.XORepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
