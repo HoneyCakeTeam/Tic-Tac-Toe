@@ -2,9 +2,11 @@ package com.honeycake.tictactoe.ui.screen.game
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.honeycake.tictactoe.data.GameSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -12,6 +14,17 @@ class GameViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(GameUiState())
     val state = _state.asStateFlow()
 
+    private val _gameState = MutableStateFlow( GameSession())
+
+    init {
+        getPlayerName()
+    }
+    private fun getPlayerName(){
+        _state.update { it.copy(
+            firstPlayerUiState =PlayerUiState(playerName = _gameState.value.firstPlayerName),
+            secondPlayerUiState =PlayerUiState(playerName = _gameState.value.secondPlayerName),
+        ) }
+    }
 
     fun onButtonClick(buttonIndex: Int) {
         val currentState = _state.value
@@ -25,11 +38,17 @@ class GameViewModel @Inject constructor() : ViewModel() {
         val currentButtonState = currentGameState[buttonIndex]
 
         if (currentButtonState.enabled) {
+            val updatedButtonState = updateButtonState(currentButtonState, currentPlayer.playerRole)
+            currentGameState.removeAt(buttonIndex)
+            currentGameState.add(buttonIndex,updatedButtonState)
 
-            updateButtonState(currentButtonState, currentPlayer.playerRole)
+            Log.d("GameViewModel", "currentButtonState $currentButtonState")
 
-            val updatedState = currentState.copy(gameState = currentGameState)
-            _state.value = updatedState
+            val updatedState = currentState.copy(gameState = currentGameState.toList())
+            _state.update { updatedState }
+            Log.d("GameViewModel", "updatedState $updatedState ")
+
+            Log.d("GameViewModel", "Button $buttonIndex clicked by ${currentPlayer.playerName}")
 
             if (checkWin(currentPlayer.playerRole)) {
                 val winner = determineWinner(currentState, currentPlayer.playerRole)
@@ -39,21 +58,23 @@ class GameViewModel @Inject constructor() : ViewModel() {
                     firstPlayerUiState = updatedWinner.firstPlayerUiState,
                     secondPlayerUiState = updatedWinner.secondPlayerUiState
                 )
+
                 Log.d("GameViewModel", "Player ${winner.playerName} wins!")
-            }else if (isGameTied(updatedState)) {
+            } else if (isGameTied(updatedState)) {
                 _state.value = updatedState.copy(isTied = true)
                 Log.d("GameViewModel", "The game is tied!")
             }
+        } else {
+            Log.d("GameViewModel", "Button $buttonIndex is disabled")
         }
-
     }
 
     private fun isGameTied(currentState: GameUiState): Boolean {
         return currentState.gameState.none { it.enabled }
     }
-    private fun updateButtonState(buttonState: ButtonState, playerRole: Int) {
-        buttonState.enabled = false
-        buttonState.image = playerRole
+
+    private fun updateButtonState(buttonState: ButtonState, playerRole: Int):ButtonState {
+        return buttonState.copy(  image = playerRole ,enabled = false)
     }
 
     private fun determineWinner(currentState: GameUiState, playerRole: Int): PlayerUiState {
@@ -86,13 +107,11 @@ class GameViewModel @Inject constructor() : ViewModel() {
 
         for (line in horizontalLines + verticalLines + diagonalLines) {
             if (line.all { gameState[it].image == playerRole }) {
+                _state.value = _state.value.copy(winningLine = line)
                 return true
             }
         }
-
         return false
     }
+
 }
-
-
-

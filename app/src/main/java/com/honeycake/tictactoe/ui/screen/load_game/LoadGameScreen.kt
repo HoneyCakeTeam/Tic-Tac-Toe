@@ -84,7 +84,6 @@ private fun LoadGameContent(
                     isLeadingIcon = true,
                     onClickLeadingIcon = onClickCopyIcon,
                     readOnly = true,
-                    textStyle = Typography.titleSmall
                 )
             }
             LottieAnimation()

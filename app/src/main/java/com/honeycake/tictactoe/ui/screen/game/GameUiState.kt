@@ -9,7 +9,7 @@ data class GameUiState(
     val isTied: Boolean = false,
     val firstPlayerUiState: PlayerUiState = PlayerUiState(),
     val secondPlayerUiState: PlayerUiState = PlayerUiState(),
-    val gameState: List<ButtonState> = List(10) { ButtonState(null, true)},
+    val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
         listOf(3, 4, 5),
@@ -23,14 +23,14 @@ data class GameUiState(
     val diagonalLines: List<List<Int>> = listOf(
         listOf(0, 4, 8),
         listOf(2, 4, 6)
-    )
+    ),
+    val winningLine: List<Int>? = null
 )
 
-
 data class PlayerUiState(
-    val playerName: String = "Aziza",
-    val playerRole: Int = R.drawable.x_icon,
-    val playerImage: Int = R.drawable.gamer,
+    val playerName: String="",
+    val playerRole: Int=0,
+    val playerImage: Int=0,
     val isWinner: Boolean = false
 )
 
