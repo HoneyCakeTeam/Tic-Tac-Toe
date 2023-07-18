@@ -32,7 +32,7 @@ fun CreateGameScreen(
     CreateGameContent(
         state = state,
         onChangePlayerName = viewModel::onChangePlayerName,
-        onClickCreateGame = { navController.navigateToLoad() }
+        onClickCreateGame = { viewModel.onCreateGameClicked(navController) }
     )
 }
 

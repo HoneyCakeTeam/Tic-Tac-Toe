@@ -1,6 +1,5 @@
 package com.honeycake.tictactoe.data
 
-
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -9,20 +8,34 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-
-
 class FirebaseImpl : Firebase {
 
-    override suspend fun write(data: Any) {
-        game.push().setValue(data)
+    override suspend fun write(gameSession: GameSession) {
+        game.child(gameSession.gameId).setValue(gameSession)
     }
 
     override suspend fun read(id: String): String {
         TODO("Not yet implemented")
     }
 
-    override suspend fun update(): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun update(gameSession: GameSession): Boolean {
+            game.child(gameSession.gameId).get().addOnSuccessListener {
+                val isGameBusy = it.child("isGameCompleted").getValue(Boolean::class.java) ?: false
+                if (it.exists()&& !isGameBusy){
+                    val firstPlayerName = it.child("firstPlayerName").getValue(String::class.java) ?: ""
+                    val newGameSession = gameSession.copy(firstPlayerName = firstPlayerName)
+                    val postValues = newGameSession.toMap()
+                    val childUpdates = hashMapOf<String, Any>(
+                        newGameSession.gameId to postValues,
+                    )
+                    game.updateChildren(childUpdates)
+                } else{
+                    //TODO throw custom exception
+                }
+            }.addOnFailureListener{
+               throw it
+            }
+            return true
     }
 
     override fun getNotify(id: String): Flow<GameSession> = callbackFlow {

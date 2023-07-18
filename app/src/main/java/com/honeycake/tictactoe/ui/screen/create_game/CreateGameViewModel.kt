@@ -2,6 +2,7 @@ package com.honeycake.tictactoe.ui.screen.create_game
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.honeycake.tictactoe.data.GameSession
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
 import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
@@ -14,14 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateGameViewModel @Inject constructor(
-    private val XORepository: XORepository
+    private val xORepository: XORepository
 ) : BaseViewModel<CreateGameUiState>(CreateGameUiState()), CreateGameInteractionListeners {
 
     fun onChangePlayerName(newValue: String) {
         updateState { it.copy(firstPlayerName = newValue, isButtonEnabled = true) }
     }
 
-    //This should be replaced instead of passing navController
     override fun onCreateGameClicked(navController: NavController) {
         if (state.value.firstPlayerName.isNotEmpty()) {
             saveGameSession()
@@ -40,7 +40,7 @@ class CreateGameViewModel @Inject constructor(
             _state.value.gameId
         )
         viewModelScope.launch {
-            XORepository.saveGameSession(gameSession)
+            xORepository.saveGameSession(gameSession)
         }
     }
 
@@ -48,9 +48,6 @@ class CreateGameViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("MMddHHmmss", Locale.getDefault())
         val timestamp = dateFormat.format(Date())
         val randomNumber = (0..99999).random().toString().padStart(5, '0')
-
         return "$timestamp$randomNumber"
     }
-
-
 }

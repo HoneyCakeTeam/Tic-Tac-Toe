@@ -8,8 +8,8 @@ import javax.inject.Inject
 class XORepositoryImpl @Inject constructor(
     private val database: Firebase
 ) : XORepository {
-    override suspend fun saveGameSession(data: Any) {
-        database.write(data)
+    override suspend fun saveGameSession(gameSession: GameSession) {
+        database.write(gameSession)
     }
 
     override suspend fun getGameId(name: String): String {
@@ -18,5 +18,9 @@ class XORepositoryImpl @Inject constructor(
 
     override fun notifyGameSessionChanges(gameId: String): Flow<GameSession> {
         return database.getNotify(gameId)
+    }
+
+    override suspend fun updateGameSession(gameSession: GameSession): Boolean {
+        return database.update(gameSession)
     }
 }
