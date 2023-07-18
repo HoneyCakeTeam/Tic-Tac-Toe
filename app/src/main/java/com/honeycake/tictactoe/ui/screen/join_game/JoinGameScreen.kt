@@ -7,46 +7,48 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFiled
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
-import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
+import com.honeycake.tictactoe.ui.screen.game.navigateToGame
 
 @Composable
-fun JoinGameScreen() {
-
-    // This will be replace with stat of view model
-    val name by remember { mutableStateOf("") }
-    val gameId by remember { mutableStateOf("") }
+fun JoinGameScreen(
+     viewModel: JoinGameViewModel = hiltViewModel()
+) {
     val navController = LocalNavigationProvider.current
+    val state by viewModel.state.collectAsState()
     JoinGameContent(
-        name = name,
-        onNameChange = { name },
-        gameId = gameId,
-        onGameIdChange = { gameId },
-        onClickJoinGame = { navController.navigateToLoad("") }
+        state = state,
+        onNameChange = viewModel::onChangePlayerName,
+        onGameIdChange = viewModel::onChangeGameId,
+        onClickJoinGame = { viewModel.onJoinGameClicked() }
     )
+    LaunchedEffect(key1 = state.navigate, block = {
+        if (state.navigate){
+            navController.navigateToGame(state.gameId)
+        }
+    })
 }
 
 @Composable
 private fun JoinGameContent(
-    name: String,
+    state: JoinGameUiState,
     onNameChange: (String) -> Unit,
-    gameId: String,
     onGameIdChange: (String) -> Unit,
     onClickJoinGame: () -> Unit
 ) {
-    val navController = LocalNavigationProvider.current
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -65,20 +67,23 @@ private fun JoinGameContent(
                 verticalArrangement = Arrangement.Center,
             ) {
                 EditTextFiled(
-                    text = name,
+                    text = state.secondPlayerName,
                     hint = stringResource(R.string.enter_your_name),
                     placeHolder = "Ex: John",
                     onChange = onNameChange,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 EditTextFiled(
-                    text = gameId,
+                    text = state.gameId,
                     hint = stringResource(R.string.your_game_id),
                     placeHolder = "Ex: fcj54nd",
                     onChange = onGameIdChange,
                     modifier = Modifier.padding(bottom = 64.dp)
                 )
-                ButtonItem(text = stringResource(R.string.join_game), isEnabled = true,onClick = onClickJoinGame)
+                ButtonItem(
+                    text = stringResource(R.string.join_game),
+                    isEnabled = state.isButtonEnabled,
+                    onClick = onClickJoinGame)
             }
 
         }
