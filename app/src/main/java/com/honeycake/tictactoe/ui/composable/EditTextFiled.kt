@@ -25,7 +25,7 @@ import com.honeycake.tictactoe.ui.theme.White38
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditTextFile(
+fun EditTextFiled(
     modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
@@ -37,7 +37,9 @@ fun EditTextFile(
     onClickLeadingIcon: () -> Unit = {},
 ) {
     OutlinedTextField(
-        modifier = modifier.fillMaxWidth().height(64.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(64.dp),
         value = text,
         onValueChange = onChange,
         label = {
@@ -79,5 +81,5 @@ fun EditTextFile(
 @Preview
 @Composable
 fun PreviewEditText() {
-    EditTextFile()
+    EditTextFiled()
 }
