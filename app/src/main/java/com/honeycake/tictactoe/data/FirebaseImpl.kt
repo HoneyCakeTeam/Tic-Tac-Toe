@@ -7,6 +7,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class FirebaseImpl : Firebase {
 
@@ -14,8 +15,14 @@ class FirebaseImpl : Firebase {
         game.child(gameSession.gameId).setValue(gameSession)
     }
 
-    override suspend fun read(id: String): String {
-        TODO("Not yet implemented")
+    override suspend fun read(id: String): GameSession {
+        val data =game.child(id).get().await().value as Map<*,*>?
+        return GameSession(
+            firstPlayerName = data?.get("firstPlayerName") as String? ?: "",
+            secondPlayerName = data?.get("secondPlayerName") as String? ?: "",
+            isGameCompleted = data?.get("isGameCompleted") as Boolean? ?: false,
+            gameId = data?.get("gameId") as String? ?: "",
+        )
     }
 
     override suspend fun update(gameSession: GameSession): Boolean {
