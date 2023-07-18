@@ -29,7 +29,7 @@ fun CreateGameScreen(
 fun CreateGameContent(
     state: CreateGameUiState,
     onChangePlayerName: (String) -> Unit,
-    onClickCreateGame: () -> Unit
+    onClickCreateGame: () -> Unit,
 ) {
     TicTacToeScaffold {
         EditTextFiled(

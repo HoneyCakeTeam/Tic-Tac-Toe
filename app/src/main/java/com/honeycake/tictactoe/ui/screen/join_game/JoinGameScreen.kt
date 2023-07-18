@@ -8,9 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,15 +17,11 @@ import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFiled
 import com.honeycake.tictactoe.ui.composable.TicTacToeScaffold
-import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
-import com.honeycake.tictactoe.ui.composable.EditTextFiled
-import com.honeycake.tictactoe.ui.composable.GameBackground
-import com.honeycake.tictactoe.ui.composable.GameTitle
 import com.honeycake.tictactoe.ui.screen.game.navigateToGame
 
 @Composable
 fun JoinGameScreen(
-     viewModel: JoinGameViewModel = hiltViewModel()
+    viewModel: JoinGameViewModel = hiltViewModel(),
 ) {
     val navController = LocalNavigationProvider.current
     val state by viewModel.state.collectAsState()
@@ -39,7 +32,7 @@ fun JoinGameScreen(
         onClickJoinGame = { viewModel.onJoinGameClicked() }
     )
     LaunchedEffect(key1 = state.navigate, block = {
-        if (state.navigate){
+        if (state.navigate) {
             navController.navigateToGame(state.gameId)
         }
     })
@@ -50,7 +43,7 @@ private fun JoinGameContent(
     state: JoinGameUiState,
     onNameChange: (String) -> Unit,
     onGameIdChange: (String) -> Unit,
-    onClickJoinGame: () -> Unit
+    onClickJoinGame: () -> Unit,
 ) {
     TicTacToeScaffold {
         Column(
@@ -75,7 +68,8 @@ private fun JoinGameContent(
             ButtonItem(
                 text = stringResource(R.string.join_game),
                 isEnabled = state.isButtonEnabled,
-                onClick = onClickJoinGame)
+                onClick = onClickJoinGame
+            )
         }
     }
 }
