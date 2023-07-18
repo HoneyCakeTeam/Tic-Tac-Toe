@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,7 +19,6 @@ import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
-import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 
 @Composable
 fun CreateGameScreen(
@@ -31,14 +29,8 @@ fun CreateGameScreen(
     CreateGameContent(
         state = state,
         onChangePlayerName = viewModel::onChangePlayerName,
-        onClickCreateGame = { viewModel.onCreateGameClicked() }
+        onClickCreateGame = { viewModel.onCreateGameClicked(navController) }
     )
-
-    LaunchedEffect(key1 = state.navigate, block = {
-        if (state.navigate){
-            navController.navigateToLoad(state.gameId)
-        }
-    })
 }
 
 @Composable

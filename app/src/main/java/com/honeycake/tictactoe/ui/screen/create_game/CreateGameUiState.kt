@@ -6,5 +6,4 @@ data class CreateGameUiState(
     val isLoading: Boolean = true,
     val isError: Boolean = false,
     val gameId: String = "",
-    val navigate: Boolean = false
 )

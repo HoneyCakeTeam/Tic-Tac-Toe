@@ -1,9 +1,11 @@
 package com.honeycake.tictactoe.ui.screen.create_game
 
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.honeycake.tictactoe.data.GameSession
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -20,15 +22,16 @@ class CreateGameViewModel @Inject constructor(
         updateState { it.copy(firstPlayerName = newValue, isButtonEnabled = true) }
     }
 
-    override fun onCreateGameClicked() {
+    override fun onCreateGameClicked(navController: NavController) {
         if (state.value.firstPlayerName.isNotEmpty()) {
-            updateState { it.copy(navigate = saveGameSession()) }
+            saveGameSession()
+            navController.navigateToLoad(_state.value.gameId)
         } else
             "Dummy"
             // must be replaced with toast show that he must enter a name
     }
 
-    private fun saveGameSession(): Boolean {
+    private fun saveGameSession() {
         updateState { it.copy(gameId = generateUniqueKey()) }
         val gameSession = GameSession(
             _state.value.firstPlayerName,
@@ -37,9 +40,8 @@ class CreateGameViewModel @Inject constructor(
             _state.value.gameId
         )
         viewModelScope.launch {
-         return@launch  xORepository.saveGameSession(gameSession)
+            xORepository.saveGameSession(gameSession)
         }
-        return false
     }
 
     private fun generateUniqueKey(): String {
