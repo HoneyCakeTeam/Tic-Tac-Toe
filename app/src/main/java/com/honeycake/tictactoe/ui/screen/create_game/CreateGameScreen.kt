@@ -14,20 +14,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
-import com.honeycake.tictactoe.ui.composable.EditTextFile
+import com.honeycake.tictactoe.ui.composable.EditTextFiled
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
+import com.honeycake.tictactoe.ui.theme.Typography
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 
 @Composable
 fun CreateGameScreen(
     viewModel: CreateGameViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+    val navController = LocalNavigationProvider.current
     CreateGameContent(
         state = state,
         onChangePlayerName = viewModel::onChangePlayerName,
-        onClickCreateGame = { }
+        onClickCreateGame = { navController.navigateToLoad() }
     )
 }
 
@@ -49,7 +54,7 @@ fun CreateGameContent(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             GameTitle()
-            EditTextFile(
+            EditTextFiled(
                 text = state.firstPlayerName,
                 hint = stringResource(R.string.enter_your_name),
                 placeHolder = "Ex: John",

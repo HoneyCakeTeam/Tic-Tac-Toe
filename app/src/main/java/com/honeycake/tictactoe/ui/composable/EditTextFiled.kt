@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +25,7 @@ import com.honeycake.tictactoe.ui.theme.White38
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditTextFile(
+fun EditTextFiled(
     modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
@@ -57,7 +58,8 @@ fun EditTextFile(
                 IconButton(onClick = onClickLeadingIcon) {
                     Icon(
                         painter = painterResource(id = R.drawable.copy),
-                        contentDescription = "Copy button"
+                        contentDescription = "Copy button",
+                        tint = Card
                     )
                 }
             }
@@ -77,5 +79,5 @@ fun EditTextFile(
 @Preview
 @Composable
 fun PreviewEditText() {
-    EditTextFile()
+    EditTextFiled()
 }

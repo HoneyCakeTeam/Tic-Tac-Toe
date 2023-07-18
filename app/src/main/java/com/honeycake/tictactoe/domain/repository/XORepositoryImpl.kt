@@ -1,6 +1,8 @@
-package com.honeycake.tictactoe.repository
+package com.honeycake.tictactoe.domain.repository
 
 import com.honeycake.tictactoe.data.Firebase
+import com.honeycake.tictactoe.data.GameSession
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class XORepositoryImpl @Inject constructor(
@@ -14,4 +16,7 @@ class XORepositoryImpl @Inject constructor(
         return database.read(name)
     }
 
+    override fun notifyGameSessionChanges(gameId: String): Flow<GameSession> {
+        return database.getNotify(gameId)
+    }
 }
