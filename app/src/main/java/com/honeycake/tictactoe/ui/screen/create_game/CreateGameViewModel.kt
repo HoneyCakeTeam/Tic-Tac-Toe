@@ -22,14 +22,13 @@ class CreateGameViewModel @Inject constructor(
 
     override fun onCreateGameClicked() {
         if (state.value.firstPlayerName.isNotEmpty()) {
-            saveGameSession()
-            updateState { it.copy(navigate = true) }
+            updateState { it.copy(navigate = saveGameSession()) }
         } else
             "Dummy"
             // must be replaced with toast show that he must enter a name
     }
 
-    private fun saveGameSession() {
+    private fun saveGameSession(): Boolean {
         updateState { it.copy(gameId = generateUniqueKey()) }
         val gameSession = GameSession(
             _state.value.firstPlayerName,
@@ -38,8 +37,9 @@ class CreateGameViewModel @Inject constructor(
             _state.value.gameId
         )
         viewModelScope.launch {
-            xORepository.saveGameSession(gameSession)
+         return@launch  xORepository.saveGameSession(gameSession)
         }
+        return false
     }
 
     private fun generateUniqueKey(): String {
