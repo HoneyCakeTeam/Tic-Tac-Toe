@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,7 +21,7 @@ import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
-import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
+import com.honeycake.tictactoe.ui.screen.game.navigateToGame
 
 @Composable
 fun JoinGameScreen(
@@ -32,8 +33,13 @@ fun JoinGameScreen(
         state = state,
         onNameChange = viewModel::onChangePlayerName,
         onGameIdChange = viewModel::onChangeGameId,
-        onClickJoinGame = { viewModel.onJoinGameClicked(navController) }
+        onClickJoinGame = { viewModel.onJoinGameClicked() }
     )
+    LaunchedEffect(key1 = state.navigate, block = {
+        if (state.navigate){
+            navController.navigateToGame(state.gameId)
+        }
+    })
 }
 
 @Composable
