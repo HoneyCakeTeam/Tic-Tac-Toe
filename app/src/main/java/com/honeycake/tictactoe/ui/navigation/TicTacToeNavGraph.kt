@@ -6,7 +6,6 @@ import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.screen.create_game.createRoute
 import com.honeycake.tictactoe.ui.screen.game.gameRoute
 import com.honeycake.tictactoe.ui.screen.home.homeRoute
-import com.honeycake.tictactoe.ui.screen.splash.splashRoute
 import com.honeycake.tictactoe.ui.screen.join_game.joinRoute
 import com.honeycake.tictactoe.ui.screen.load_game.loadRoute
 
@@ -17,9 +16,8 @@ fun TicTacToeNavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.Home.route
     ) {
-        splashRoute()
         homeRoute()
         createRoute()
         gameRoute()
