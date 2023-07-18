@@ -7,11 +7,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.honeycake.tictactoe.R
 
 /**
  * Created by Aziza Helmy on 7/14/2023.
@@ -19,7 +17,7 @@ import com.honeycake.tictactoe.R
 @Composable
 fun GameCell(
     modifier: Modifier = Modifier,
-    painter: Painter,
+    imageResource: Int?,
     isEnabled: Boolean = true,
     onButtonClicked: () -> Unit,
 ) {
@@ -34,12 +32,14 @@ fun GameCell(
             disabledContainerColor = Color.Transparent
         )
     ) {
-        Image(painter = painter, contentDescription = "")
+        if (imageResource != null) {
+            Image(painter = painterResource(id = imageResource), contentDescription = "")
+        }
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewGameCell() {
-    GameCell(painter = painterResource(id = R.drawable.x_icon), onButtonClicked = {})
+    // GameCell(painter = painterResource(id = R.drawable.x_icon), onButtonClicked = {})
 }
