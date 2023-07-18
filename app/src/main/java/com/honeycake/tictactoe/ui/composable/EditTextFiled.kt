@@ -37,7 +37,9 @@ fun EditTextFiled(
     textStyle: TextStyle = Typography.titleSmall
 ) {
     OutlinedTextField(
-        modifier = modifier.fillMaxWidth().height(64.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(64.dp),
         value = text,
         onValueChange = onChange,
         label = {
