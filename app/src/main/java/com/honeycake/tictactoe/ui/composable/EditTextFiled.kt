@@ -25,7 +25,7 @@ import com.honeycake.tictactoe.ui.theme.White38
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditTextFile(
+fun EditTextFiled(
     modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
@@ -58,8 +58,8 @@ fun EditTextFile(
                 IconButton(onClick = onClickLeadingIcon) {
                     Icon(
                         painter = painterResource(id = R.drawable.copy),
-                        tint = Color.White,
-                        contentDescription = "Copy button"
+                        contentDescription = "Copy button",
+                        tint = Card
                     )
                 }
             }
@@ -79,5 +79,5 @@ fun EditTextFile(
 @Preview
 @Composable
 fun PreviewEditText() {
-    EditTextFile()
+    EditTextFiled()
 }
