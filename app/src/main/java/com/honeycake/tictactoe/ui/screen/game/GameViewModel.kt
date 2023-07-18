@@ -1,29 +1,40 @@
 package com.honeycake.tictactoe.ui.screen.game
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.honeycake.tictactoe.data.GameSession
+import com.honeycake.tictactoe.domain.repository.XORepository
+import com.honeycake.tictactoe.ui.base.BaseViewModel
+import com.honeycake.tictactoe.ui.screen.load_game.LoadArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(GameUiState())
-    val state = _state.asStateFlow()
+class GameViewModel @Inject constructor(
+    private val XORepository: XORepository,
+    savedStateHandle: SavedStateHandle,
+    ) : BaseViewModel<GameUiState>(GameUiState()) {
 
-    private val _gameState = MutableStateFlow( GameSession())
+    private val args = GameArgs(savedStateHandle)
 
     init {
-        getPlayerName()
+        loadData(args.gameId!!)
     }
-    private fun getPlayerName(){
-        _state.update { it.copy(
-            firstPlayerUiState =PlayerUiState(playerName = _gameState.value.firstPlayerName),
-            secondPlayerUiState =PlayerUiState(playerName = _gameState.value.secondPlayerName),
-        ) }
+
+    private fun loadData(gameId:String){
+        viewModelScope.launch{
+           val gameSession =  XORepository.loadData(gameId)
+            updateState { it.copy(
+                firstPlayerUiState = PlayerUiState(playerName = gameSession.firstPlayerName),
+                secondPlayerUiState = PlayerUiState(playerName = gameSession.secondPlayerName)
+            ) }
+        }
     }
 
     fun onButtonClick(buttonIndex: Int) {

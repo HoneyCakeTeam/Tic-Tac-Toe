@@ -12,8 +12,8 @@ class XORepositoryImpl @Inject constructor(
         database.write(gameSession)
     }
 
-    override suspend fun getGameId(name: String): String {
-        return database.read(name)
+    override suspend fun loadData(gameId: String): GameSession {
+        return database.read(gameId)
     }
 
     override fun notifyGameSessionChanges(gameId: String): Flow<GameSession> {
