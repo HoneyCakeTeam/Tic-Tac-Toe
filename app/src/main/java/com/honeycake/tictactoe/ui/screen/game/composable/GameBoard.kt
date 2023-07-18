@@ -65,12 +65,14 @@ fun GameBoard(
                     for (col in 0..2) {
                         val index = row * 3 + col
                         val buttonState = state.gameState[index]
+                        Log.e("TAG", "GameCell:${buttonState}")
+
                         GameCell(
                             onButtonClicked = {
                                 Log.e("TAG", "GameCell:${index} ")
                                 onButtonClicked(index)
                             },
-                            painter = painterResource(id = buttonState.image ?: R.drawable.x_icon),
+                            imageResource = buttonState.image,
                             isEnabled = buttonState.enabled
                         )
                     }
