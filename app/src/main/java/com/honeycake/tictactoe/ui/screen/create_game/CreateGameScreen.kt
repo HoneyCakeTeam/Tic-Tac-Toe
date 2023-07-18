@@ -41,7 +41,6 @@ fun CreateGameContent(
         )
         ButtonItem(
             text = stringResource(R.string.create_game),
-            isEnabled = state.isButtonEnabled,
             onClick = onClickCreateGame
         )
     }
