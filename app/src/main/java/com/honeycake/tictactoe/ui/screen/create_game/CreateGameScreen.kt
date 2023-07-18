@@ -14,20 +14,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.ButtonItem
 import com.honeycake.tictactoe.ui.composable.EditTextFile
 import com.honeycake.tictactoe.ui.composable.GameBackground
 import com.honeycake.tictactoe.ui.composable.GameTitle
+import com.honeycake.tictactoe.ui.screen.load_game.navigateToLoad
 
 @Composable
 fun CreateGameScreen(
     viewModel: CreateGameViewModel = hiltViewModel(),
 ) {
+    val navController = LocalNavigationProvider.current
     val state by viewModel.state.collectAsState()
     CreateGameContent(
         state = state,
         onChangePlayerName = viewModel::onChangePlayerName,
-        onClickCreateGame = { }
+        onClickCreateGame = { viewModel.onCreateGameClicked(navController) }
     )
 }
 
