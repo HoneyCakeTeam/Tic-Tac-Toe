@@ -1,5 +1,7 @@
 package com.honeycake.tictactoe.ui.screen.join_game
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,17 +28,26 @@ fun JoinGameScreen(
 ) {
     val navController = LocalNavigationProvider.current
     val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
     JoinGameContent(
         state = state,
         onNameChange = viewModel::onChangePlayerName,
         onGameIdChange = viewModel::onChangeGameId,
         onClickJoinGame = { viewModel.onJoinGameClicked() }
     )
-    LaunchedEffect(key1 = state.navigate, block = {
+
+    LaunchedEffect(state.missedRequiredFailed){
+        if (state.missedRequiredFailed){
+            Log.e("TAG", "JoinGameScreen:mmmmmm ", )
+            Toast.makeText(context,"please fill all required", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    LaunchedEffect(state.navigate) {
         if (state.navigate) {
             navController.navigateToGame(state.gameId)
         }
-    })
+    }
 }
 
 @Composable
@@ -67,7 +79,6 @@ private fun JoinGameContent(
             )
             ButtonItem(
                 text = stringResource(R.string.join_game),
-                isEnabled = state.isButtonEnabled,
                 onClick = onClickJoinGame
             )
         }

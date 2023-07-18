@@ -9,4 +9,5 @@ data class JoinGameUiState(
     val isLoading: Boolean = true,
     val isError: Boolean = false,
     val navigate: Boolean = false,
+    val missedRequiredFailed: Boolean = false,
 )

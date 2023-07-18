@@ -1,6 +1,5 @@
 package com.honeycake.tictactoe.ui.screen.join_game
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.honeycake.tictactoe.data.GameSession
 import com.honeycake.tictactoe.domain.repository.XORepository
@@ -20,21 +19,18 @@ class JoinGameViewModel @Inject constructor(
     }
 
     fun onChangeGameId(id: String) {
-        updateState { it.copy(gameId = id, isButtonEnabled = true) }
+        updateState { it.copy(gameId = id) }
     }
 
     override fun onJoinGameClicked() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
+            viewModelScope.launch(Dispatchers.IO) {
                 if (state.value.secondPlayerName.isNotEmpty() && state.value.gameId.isNotEmpty()) {
                     updateGameSession()
-                    updateState { it.copy(navigate = true) }
+                        updateState { it.copy(navigate = true) }
+                }else{
+                    updateState { it.copy(missedRequiredFailed = true) }
                 }
-            }catch (e: Throwable){
-                Log.e("TAG", "onJoinGameClicked: ${e.message}", )
             }
-        }
-
     }
 
     private suspend fun updateGameSession() {
