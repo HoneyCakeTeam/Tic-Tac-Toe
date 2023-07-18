@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
@@ -33,6 +34,7 @@ fun EditTextFiled(
     isLeadingIcon: Boolean = false,
     readOnly: Boolean = false,
     onClickLeadingIcon: () -> Unit = {},
+    textStyle: TextStyle = Typography.titleSmall
 ) {
     OutlinedTextField(
         modifier = modifier.fillMaxWidth().height(64.dp),
@@ -65,12 +67,12 @@ fun EditTextFiled(
         placeholder = {
             Text(
                 text = placeHolder,
-                style = Typography.titleSmall,
+                style = textStyle,
                 color = White38
             )
         },
         readOnly = readOnly,
-        textStyle = Typography.titleSmall
+        textStyle = textStyle
     )
 }
 
