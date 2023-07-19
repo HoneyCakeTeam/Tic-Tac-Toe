@@ -16,13 +16,35 @@ class FirebaseImpl : Firebase {
     }
 
     override suspend fun read(id: String): GameSession {
-        val data =game.child(id).get().await().value as Map<*,*>?
-        return GameSession(
-            firstPlayerName = data?.get("firstPlayerName") as String? ?: "",
-            secondPlayerName = data?.get("secondPlayerName") as String? ?: "",
-            isGameCompleted = data?.get("isGameCompleted") as Boolean? ?: false,
-            gameId = data?.get("gameId") as String? ?: "",
+        val gameSessionRef = game.child(id)
+        val gameSessionSnapshot = gameSessionRef.get().await()
+
+        val initialData = gameSessionSnapshot.value as Map<*, *>?
+        val gameSession = GameSession(
+            firstPlayerName = initialData?.get("firstPlayerName") as String? ?: "",
+            secondPlayerName = initialData?.get("secondPlayerName") as String? ?: "",
+            isGameCompleted = initialData?.get("isGameCompleted") as Boolean? ?: false,
+            gameId = initialData?.get("gameId") as String? ?: ""
         )
+
+        gameSessionRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val updatedData = dataSnapshot.value as Map<*, *>?
+                val updatedGameSession = gameSession.copy(
+                    firstPlayerName = updatedData?.get("firstPlayerName") as String? ?: gameSession.firstPlayerName,
+                    secondPlayerName = updatedData?.get("secondPlayerName") as String? ?: gameSession.secondPlayerName,
+                    isGameCompleted = updatedData?.get("isGameCompleted") as Boolean? ?: gameSession.isGameCompleted,
+                    gameId = updatedData?.get("gameId") as String? ?: gameSession.gameId
+                )
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors
+            }
+        })
+
+        return gameSession
     }
 
     override suspend fun update(gameSession: GameSession): Boolean {
