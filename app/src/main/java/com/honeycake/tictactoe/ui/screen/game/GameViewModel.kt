@@ -24,14 +24,18 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadData(gameId:String){
+    private fun loadData(gameId:String){
         viewModelScope.launch{
-            val gameSession = XORepository.loadData(gameId)
-            getRole()
-            updateState { it.copy(firstPlayerName = gameSession.firstPlayerName) }
-            updateState { it.copy(secondPlayerName = gameSession.secondPlayerName) }
-
+            XORepository.loadData(gameId).collect{ gameSession ->
+                if (gameSession.firstPlayerName.isNotEmpty() || gameSession.secondPlayerName.isNotEmpty()){
+                    updateState { it.copy(
+                        firstPlayerName = gameSession.firstPlayerName,
+                        secondPlayerName = gameSession.secondPlayerName
+                    ) }
+                }
+            }
         }
+        getRole()
     }
 
     private fun getRole() {
@@ -43,6 +47,13 @@ class GameViewModel @Inject constructor(
         }
 
     }
+
+//    private fun playerTurn(){
+//        if(state.value.playerTurn == 1){
+//
+//        }else{
+//        }
+//    }
 
     private val database = FirebaseDatabase.getInstance()
 

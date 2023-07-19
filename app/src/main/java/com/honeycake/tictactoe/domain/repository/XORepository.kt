@@ -7,5 +7,5 @@ interface XORepository {
     suspend fun saveGameSession(gameSession: GameSession)
     fun notifyGameSessionChanges(gameId: String): Flow<GameSession>
     suspend fun updateGameSession(gameSession: GameSession) : Boolean
-    suspend fun loadData(gameId:String):GameSession
+    suspend fun loadData(gameId:String):Flow<GameSession>
 }
