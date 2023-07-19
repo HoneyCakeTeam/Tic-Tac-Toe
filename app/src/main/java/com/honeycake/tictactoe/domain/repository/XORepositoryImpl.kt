@@ -20,7 +20,7 @@ class XORepositoryImpl @Inject constructor(
         return database.getNotify(gameId)
     }
 
-    override suspend fun updateBoard(gameId: String, updatedBoard: List<List<Int>>) {
+    override suspend fun updateBoard(gameId: String, updatedBoard: List<Int>) {
         database.updateBoard(gameId, updatedBoard)
     }
 

@@ -1,10 +1,9 @@
 package com.honeycake.tictactoe.ui.screen.game
 
-import android.util.Log
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.honeycake.tictactoe.R
-import com.honeycake.tictactoe.data.GameSession
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +28,7 @@ class GameViewModel @Inject constructor(
         viewModelScope.launch {
             XORepository.notifyGameSessionChanges(gameId).collect { gameSession ->
                 val isGameCompleted = gameSession.isGameCompleted
-                val winner = if (isGameCompleted) getWinner(gameSession) else null
+                val winner = if (isGameCompleted) gameSession.winner else null
 
                 updateState { currentState ->
                     currentState.copy(
@@ -41,12 +40,9 @@ class GameViewModel @Inject constructor(
                         currentPlayerName = if (currentState.isTurn) gameSession.firstPlayerName else gameSession.secondPlayerName
                     )
                 }
-
-                initializeBoard(gameSession) // Add this line to initialize the board
             }
         }
     }
-
 
     private fun observeGameSession(gameId: String) {
         viewModelScope.launch {
@@ -60,87 +56,39 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun initializeBoard(gameSession: GameSession) {
-        val updatedBoard = gameSession.board.map { it.toList() }
-        val gameState = mutableListOf<ButtonState>()
-
-        for (row in updatedBoard) {
-            for (cellValue in row) {
-                val buttonState = ButtonState(
-                   // image = if (cellValue == 0) R.drawable.x_icon else if (cellValue == 1) R.drawable.o_icon else null,
-                  //  enabled = cellValue == null
-                )
-                gameState.add(buttonState)
-            }
-        }
-
-        updateState { currentState ->
-            currentState.copy(
-                gameState = gameState,
-                isTurn = gameSession.isTurn
-            )
-        }
-    }
-
-    fun onButtonClick(buttonIndex: Int) {
+    fun onButtonClick(index: Int) {
         val currentState = _state.value
+        val currentPlayerIcon = currentState.currentPlayerIcon
         val currentGameState = currentState.gameState.toMutableList()
-        val currentButtonState = currentGameState[buttonIndex]
+        val currentValue = currentGameState[index]
 
-        if (currentButtonState.enabled && currentButtonState.image == null) {
-            val currentPlayerIcon = currentState.currentPlayerIcon
-            val updatedButtonState = updateButtonState(currentButtonState, currentPlayerIcon)
-            currentGameState[buttonIndex] = updatedButtonState
+        if (currentValue == 0) {
+            currentGameState[index] = if (currentPlayerIcon == R.drawable.x_icon) 1 else 2
 
             val updatedState = currentState.copy(gameState = currentGameState.toList())
 
-            // Update the game board state
-            val updatedBoard = updateGameBoard(currentState.board, buttonIndex, currentPlayerIcon)
-            val updatedStateWithBoard = updatedState.copy(board = updatedBoard)
-
-            _state.update { updatedStateWithBoard }
+            _state.update { updatedState }
             viewModelScope.launch {
-                XORepository.updateBoard(args.gameId!!, updatedBoard)
+                XORepository.updateBoard(args.gameId!!, currentGameState)
             }
 
-            if (checkWin(updatedStateWithBoard, currentPlayerIcon)) {
-                val winnerIcon = if (currentPlayerIcon == currentState.firstPlayerIcon) currentState.firstPlayerIcon else currentState.secondPlayerIcon
-                val updatedWinner = updatePlayerAsWinner(updatedStateWithBoard, winnerIcon)
+            if (checkWin(updatedState, currentPlayerIcon)) {
+                val playerIcon =
+                    if (currentPlayerIcon == currentState.firstPlayerIcon) currentState.firstPlayerIcon else currentState.secondPlayerIcon
+                val updatedWinner = updatePlayerAsWinner(updatedState, playerIcon)
                 _state.update { updatedWinner }
-                Log.d("GameViewModel", "Player ${currentState.currentPlayerName} wins!")
-            } else if (isGameTied(updatedStateWithBoard)) {
+            } else if (isGameTied(updatedState)) {
                 _state.update { it.copy(isTied = true) }
-                Log.d("GameViewModel", "The game is tied!")
             }
 
-            // Switch turn
-            _state.update { currentState.copy(isTurn = !currentState.isTurn) }
+            // Switch turn and update current player's name
+            val updatedCurrentPlayerName = if (currentState.isTurn) currentState.secondPlayerName else currentState.firstPlayerName
+            _state.update { currentState.copy(isTurn = !currentState.isTurn, currentPlayerName = updatedCurrentPlayerName) }
         } else {
-            Log.d("GameViewModel", "Button $buttonIndex is disabled")
         }
     }
 
-    private fun updateGameBoard(
-        currentBoard: List<List<Int>>,
-        buttonIndex: Int,
-        currentPlayerIcon: Int
-    ): List<List<Int>> {
-        val updatedBoard = currentBoard.toMutableList()
 
-        val row = buttonIndex / 3
-        val column = buttonIndex % 3
-
-        val rowList = updatedBoard[row].toMutableList()
-        rowList[column] = if (currentPlayerIcon == R.drawable.x_icon) R.drawable.x_icon else R.drawable.o_icon
-
-        updatedBoard[row] = rowList
-
-        return updatedBoard
-    }
-
-    private fun updateButtonState(buttonState: ButtonState, playerIcon: Int): ButtonState {
-        return buttonState.copy(image = playerIcon, enabled = false)
-    }
 
     private fun checkWin(currentState: GameUiState, playerIcon: Int): Boolean {
         val gameState = currentState.gameState
@@ -148,18 +96,17 @@ class GameViewModel @Inject constructor(
             currentState.horizontalLines + currentState.verticalLines + currentState.diagonalLines
 
         for (line in linesToCheck) {
-            val lineValues = line.map { gameState[it].image }
+            val lineValues = line.map { gameState[it] }
             if (lineValues.all { it == playerIcon }) {
                 currentState.winningLine = line
                 return true
             }
         }
-
         return false
     }
 
     private fun isGameTied(currentState: GameUiState): Boolean {
-        return currentState.gameState.none { it.enabled && it.image == null }
+        return currentState.gameState.all { it != 0 }
     }
 
     private fun updatePlayerAsWinner(currentState: GameUiState, winner: Int): GameUiState {
@@ -167,25 +114,5 @@ class GameViewModel @Inject constructor(
             winner = winner,
             winningLine = null
         )
-    }
-
-    private fun getCurrentPlayerIcon(gameSession: GameSession): Int {
-        val currentState = _state.value
-        return if (gameSession.firstPlayerName == currentState.currentPlayerName) {
-            currentState.firstPlayerIcon
-        } else {
-            currentState.secondPlayerIcon
-        }
-    }
-
-    private fun getWinner(gameSession: GameSession): Int? {
-        val currentState = _state.value
-        return if (gameSession.winner == 1) {
-            currentState.firstPlayerIcon
-        } else if (gameSession.winner == 2) {
-            currentState.secondPlayerIcon
-        } else {
-            null
-        }
     }
 }

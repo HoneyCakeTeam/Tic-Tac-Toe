@@ -17,7 +17,7 @@ data class GameUiState(
     val winner: Int? = null,
     val isTied: Boolean = false,
     val isTurn: Boolean = true,
-    val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
+    val gameState: List<Int> = List(9) {0},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
         listOf(3, 4, 5),
@@ -34,5 +34,3 @@ data class GameUiState(
     ),
     var winningLine: List<Int>? = null
 )
-
-data class ButtonState(var image: Int? = null, var enabled: Boolean = true)

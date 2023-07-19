@@ -86,6 +86,5 @@ fun GameBoard(
 @Preview
 @Composable
 fun PreviewGameBoard() {
-    GameBoard(state = GameUiState(), onButtonClicked = {})
+   // GameBoard(state = GameUiState(), onButtonClicked = {})
 }
-

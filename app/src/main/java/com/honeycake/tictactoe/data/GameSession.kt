@@ -12,7 +12,7 @@ data class GameSession(
     val winner: Int? = null,
     val isTurn: Boolean = false,
     val isGameLoaded: Boolean = false,
-    val board: List<List<Int>> = emptyList(),
+    val board: List<Int> = List(9) {0},
     val gameId: String = "",
 ) {
     @Exclude
