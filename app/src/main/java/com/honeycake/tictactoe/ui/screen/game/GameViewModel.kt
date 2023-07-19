@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     private val XORepository: XORepository,
     savedStateHandle: SavedStateHandle,
-    ) : BaseViewModel<GameUiState>(GameUiState()) {
+) : BaseViewModel<GameUiState>(GameUiState()) {
 
     private val args = GameArgs(savedStateHandle)
 
@@ -23,15 +23,17 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun loadData(gameId:String){
-        viewModelScope.launch{
-            XORepository.loadData(gameId).collect{ gameSession ->
-                if (gameSession.firstPlayerName.isNotEmpty() || gameSession.secondPlayerName.isNotEmpty()){
-                    updateState { it.copy(
-                        firstPlayerName = gameSession.firstPlayerName,
-                        secondPlayerName = gameSession.secondPlayerName,
-                        PlayerTurn = gameSession.currentPlayer
-                    ) }
+    private fun loadData(gameId: String) {
+        viewModelScope.launch {
+            XORepository.loadData(gameId).collect { gameSession ->
+                if (gameSession.firstPlayerName.isNotEmpty() || gameSession.secondPlayerName.isNotEmpty()) {
+                    updateState {
+                        it.copy(
+                            firstPlayerName = gameSession.firstPlayerName,
+                            secondPlayerName = gameSession.secondPlayerName,
+                            PlayerTurn = gameSession.currentPlayer
+                        )
+                    }
                 }
             }
         }
@@ -48,17 +50,26 @@ class GameViewModel @Inject constructor(
 
     }
 
-    private fun playerTurn(){
+    private fun playerTurn() {
         when (state.value.PlayerTurn) {
             1 -> {
-                updateState { it.copy(isFirstPlayerSelected = true, isSecondPlayerSelected = false) }
+                updateState {
+                    it.copy(
+                        isFirstPlayerSelected = true,
+                        isSecondPlayerSelected = false,
+                        image = R.drawable.x_icon,
+                        enabled = false
+                    )
+                }
             }
 
             2 -> {
                 updateState {
                     it.copy(
                         isSecondPlayerSelected = true,
-                        isFirstPlayerSelected = false
+                        isFirstPlayerSelected = false,
+                        image = R.drawable.o_icon,
+                        enabled = false
                     )
                 }
             }
@@ -103,12 +114,15 @@ class GameViewModel @Inject constructor(
 //
 
 
+    fun updateBoard(buttonIndex: Int){
+        viewModelScope.launch {
+            XORepository.updateBoard(args.gameId!!,)
+        }
+    }
     fun onButtonClick(buttonIndex: Int) {
         playerTurn()
 
         switchPlayer()
-
-
 
 
 //        val currentState = _state.value
@@ -162,13 +176,15 @@ class GameViewModel @Inject constructor(
 //        }
     }
 
+/*
     private fun isGameTied(currentState: GameUiState): Boolean {
-        return currentState.gameState.none { it.enabled }
+        return currentState.board.none { it.enabled }
     }
 
-    private fun updateButtonState(buttonState: ButtonState, playerRole: Int):ButtonState {
-        return buttonState.copy(  image = playerRole ,enabled = false)
+    private fun updateButtonState(buttonState: ButtonState, playerRole: Int): ButtonState {
+        return buttonState.copy(image = playerRole, enabled = false)
     }
+*/
 
 //    private fun determineWinner(currentState: GameUiState, playerRole: Int): PlayerUiState {
 //        return if (playerRole == currentState.firstPlayerUiState.playerRole) {

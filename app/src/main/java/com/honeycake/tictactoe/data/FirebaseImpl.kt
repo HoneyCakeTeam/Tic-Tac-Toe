@@ -52,7 +52,10 @@ class FirebaseImpl : Firebase {
 
         return gameSession
     }
-
+    override suspend fun updateBoard(gameId: String, updatedBoard: List<Int>) {
+        val boardRef = game.child(gameId).child("board")
+        boardRef.setValue(updatedBoard).await()
+    }
     override suspend fun update(gameSession: GameSession): Boolean {
             game.child(gameSession.gameId).get().addOnSuccessListener {
                 val isGameBusy = it.child("isGameReady").getValue(Boolean::class.java) ?: false

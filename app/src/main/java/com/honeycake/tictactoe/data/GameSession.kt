@@ -10,7 +10,9 @@ data class GameSession(
     val isGameReady: Boolean = false,
     val gameId: String = "",
     val currentPlayer: Int = 1,
-){
+    val board: List<Int> = List(9) {0},
+    val winner: Boolean = false,
+    ){
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -18,7 +20,9 @@ data class GameSession(
             "secondPlayerName" to secondPlayerName,
             "isGameReady" to isGameReady,
             "gameId" to gameId,
-            "currentPlayer" to currentPlayer
+            "currentPlayer" to currentPlayer,
+            "board" to board,
+            "winner" to winner
         )
     }
 }

@@ -65,8 +65,8 @@ fun GameBoard(
                                 Log.e("TAG", "GameCell:${index} ")
                                 onButtonClicked(index)
                             },
-                            imageResource = buttonState.image,
-                            isEnabled = buttonState.enabled
+                            imageResource = state.image,
+                            isEnabled = state.enabled
                         )
                     }
                 }

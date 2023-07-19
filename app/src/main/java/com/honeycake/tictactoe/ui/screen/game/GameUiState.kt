@@ -10,7 +10,10 @@ data class GameUiState(
     val secondPlayerName: String = "",
     val secondPlayerRole: Int = R.drawable.x_icon,
     val secondPlayerImage: Int = R.drawable.gammer2,
+    val image: Int? = null,
+    val enabled: Boolean = true,
     val isSecondPlayerWinner: Boolean = false,
+    val board: List<Int> = List(9) {0},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
         listOf(3, 4, 5),
@@ -30,9 +33,4 @@ data class GameUiState(
     val PlayerTurn: Int = 1,
     val isFirstPlayerSelected: Boolean = false,
     val isSecondPlayerSelected: Boolean = false,
-    val firstPlayerGameState: List<ButtonState> = List(9) { ButtonState(null, true)},
-    val secondPlayerGameState: List<ButtonState> = List(9) { ButtonState(null, true)},
-    val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
-    )
-
-data class ButtonState(var image: Int? = null, var enabled: Boolean = true)
+)

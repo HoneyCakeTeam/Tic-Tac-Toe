@@ -9,5 +9,6 @@ interface XORepository {
     suspend fun updateGameSession(gameSession: GameSession) : Boolean
     suspend fun loadData(gameId:String):Flow<GameSession>
      suspend fun switchPlayer(gameId: String,currentPlayer: Int)
+    suspend fun updateBoard(gameId: String, updatedBoard: List<Int>)
 
 }
