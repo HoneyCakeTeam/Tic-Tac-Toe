@@ -30,22 +30,22 @@ fun PlayersInfo(state: GameUiState) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         PlayerDetails(
-            name = state.firstPlayerUiState.playerName,
+            name = state.firstPlayerName,
             image = painterResource(
-                id = state.firstPlayerUiState.playerImage
+                id = state.firstPlayerIcon
             ),
-            role = painterResource(id = state.firstPlayerUiState.playerRole),
+           // role = painterResource(id = state.firstPlayerUiState.playerRole),
             isSelected = true
         )
 
         Text(text = stringResource(R.string.vs), style = Typography.displayMedium)
 
         PlayerDetails(
-            name = state.secondPlayerUiState.playerName,
+            name = state.secondPlayerName,
             image = painterResource(
-                id = state.secondPlayerUiState.playerImage
+                id = state.secondPlayerIcon
             ),
-            role = painterResource(id = state.secondPlayerUiState.playerRole),
+           // role = painterResource(id = state.secondPlayerUiState.playerRole),
             isSelected = true
         )
     }

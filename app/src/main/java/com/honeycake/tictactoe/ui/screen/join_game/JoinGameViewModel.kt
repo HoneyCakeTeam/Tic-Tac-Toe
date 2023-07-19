@@ -40,10 +40,10 @@ class JoinGameViewModel @Inject constructor(
     private suspend fun updateGameSession() {
             XORepository.updateGameSession(
                 GameSession(
-                    _state.value.firstPlayerName,
-                    _state.value.secondPlayerName,
-                    true,
-                    _state.value.gameId
+                    firstPlayerName = _state.value.firstPlayerName,
+                    secondPlayerName = _state.value.secondPlayerName,
+                    isGameLoaded = true,
+                    gameId = _state.value.gameId
                 )
             )
     }

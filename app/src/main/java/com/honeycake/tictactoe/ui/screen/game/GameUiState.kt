@@ -1,15 +1,22 @@
 package com.honeycake.tictactoe.ui.screen.game
 
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.data.GameSession
 
 /**
  * Created by Aziza Helmy on 7/12/2023.
  */
 data class GameUiState(
+    val firstPlayerName: String = "",
+    val firstPlayerIcon: Int = R.drawable.x_icon,
+    val secondPlayerName: String = "",
+    val secondPlayerIcon: Int = R.drawable.o_icon,
+    val isGameCompleted: Boolean = false,
+    val currentPlayerName: String = "",
+    val currentPlayerIcon: Int = R.drawable.x_icon,
+    val winner: Int? = null,
     val isTied: Boolean = false,
-//    val currentPlayer: Int = 1
-    val firstPlayerUiState: PlayerUiState = PlayerUiState("", R.drawable.x_icon, R.drawable.gamer, false),
-    val secondPlayerUiState: PlayerUiState = PlayerUiState("", R.drawable.o_icon, R.drawable.gamer, false),
+    val isTurn: Boolean = true,
     val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
@@ -25,14 +32,7 @@ data class GameUiState(
         listOf(0, 4, 8),
         listOf(2, 4, 6)
     ),
-    val winningLine: List<Int>? = null
-)
-
-data class PlayerUiState(
-    val playerName: String="",
-    val playerRole: Int=R.drawable.x_icon,
-    val playerImage: Int=R.drawable.gamer,
-    val isWinner: Boolean = false
+    var winningLine: List<Int>? = null
 )
 
 data class ButtonState(var image: Int? = null, var enabled: Boolean = true)

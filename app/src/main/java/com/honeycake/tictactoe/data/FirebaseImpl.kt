@@ -20,7 +20,7 @@ class FirebaseImpl : Firebase {
         val gameSessionSnapshot = gameSessionRef.get().await()
 
         val initialData = gameSessionSnapshot.value as Map<*, *>?
-        val gameSession = GameSession(
+        var gameSession = GameSession(
             firstPlayerName = initialData?.get("firstPlayerName") as String? ?: "",
             secondPlayerName = initialData?.get("secondPlayerName") as String? ?: "",
             isGameCompleted = initialData?.get("isGameCompleted") as Boolean? ?: false,
@@ -37,6 +37,8 @@ class FirebaseImpl : Firebase {
                     gameId = updatedData?.get("gameId") as String? ?: gameSession.gameId
                 )
 
+                // Update the gameSession object with the updated data
+                gameSession = updatedGameSession
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -45,6 +47,16 @@ class FirebaseImpl : Firebase {
         })
 
         return gameSession
+    }
+
+
+    override suspend fun readGameSession(gameId: String): GameSession {
+        val snapshot = game.child(gameId).get().await()
+        return snapshot.getValue(GameSession::class.java) ?: GameSession()
+    }
+    override suspend fun updateBoard(gameId: String, updatedBoard: List<List<Int>>) {
+        val boardRef = game.child(gameId).child("gameState")
+        boardRef.setValue(updatedBoard).await()
     }
 
     override suspend fun update(gameSession: GameSession): Boolean {

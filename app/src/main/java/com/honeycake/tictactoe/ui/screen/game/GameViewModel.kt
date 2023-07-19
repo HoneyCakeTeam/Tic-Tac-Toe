@@ -3,11 +3,8 @@ package com.honeycake.tictactoe.ui.screen.game
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.honeycake.tictactoe.R
+import com.honeycake.tictactoe.data.GameSession
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,164 +16,176 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     private val XORepository: XORepository,
     savedStateHandle: SavedStateHandle,
-    ) : BaseViewModel<GameUiState>(GameUiState()) {
+) : BaseViewModel<GameUiState>(GameUiState()) {
 
     private val args = GameArgs(savedStateHandle)
 
     init {
         loadData(args.gameId!!)
+        observeGameSession(args.gameId!!)
     }
 
-    private fun loadData(gameId:String){
-        viewModelScope.launch{
-            val gameSession = XORepository.loadData(gameId)
-            updateState { currentState ->
-                currentState.copy(
-                    firstPlayerUiState = currentState.firstPlayerUiState
-                        .copy(playerName = gameSession.firstPlayerName),
-                    secondPlayerUiState = currentState.secondPlayerUiState
-                        .copy(playerName = gameSession.secondPlayerName)
-                )
+    private fun loadData(gameId: String) {
+        viewModelScope.launch {
+            XORepository.notifyGameSessionChanges(gameId).collect { gameSession ->
+                val isGameCompleted = gameSession.isGameCompleted
+                val winner = if (isGameCompleted) getWinner(gameSession) else null
+
+                updateState { currentState ->
+                    currentState.copy(
+                        firstPlayerName = gameSession.firstPlayerName,
+                        secondPlayerName = gameSession.secondPlayerName,
+                        isGameCompleted = isGameCompleted,
+                        winner = winner,
+                        winningLine = null,
+                        currentPlayerName = if (currentState.isTurn) gameSession.firstPlayerName else gameSession.secondPlayerName
+                    )
+                }
+
+                initializeBoard(gameSession) // Add this line to initialize the board
             }
-            getRole()
         }
     }
 
-    private fun getRole() {
-        val rand = (0..1).random()
-        if (rand == 1) {
-            updateState { it.copy(firstPlayerUiState = PlayerUiState(playerRole = R.drawable.x_icon)) }
-        } else {
-            updateState { it.copy(secondPlayerUiState = PlayerUiState(playerRole = R.drawable.o_icon)) }
-        }
 
+    private fun observeGameSession(gameId: String) {
+        viewModelScope.launch {
+            XORepository.notifyGameSessionChanges(gameId).collect { gameSession ->
+                updateState { currentState ->
+                    currentState.copy(
+                        gameState = gameSession.board
+                    )
+                }
+            }
+        }
     }
 
-    private val database = FirebaseDatabase.getInstance()
+    private fun initializeBoard(gameSession: GameSession) {
+        val updatedBoard = gameSession.board.map { it.toList() }
+        val gameState = mutableListOf<ButtonState>()
 
-    private val turnRef = database.getReference("GameSession")
-        .child("071906433798066").child("Turn")
+        for (row in updatedBoard) {
+            for (cellValue in row) {
+                val buttonState = ButtonState(
+                   // image = if (cellValue == 0) R.drawable.x_icon else if (cellValue == 1) R.drawable.o_icon else null,
+                  //  enabled = cellValue == null
+                )
+                gameState.add(buttonState)
+            }
+        }
 
-
-//    fun initializeGameSession() {
-//        turnRef.setValue(1)
-//    }
-//
-//    fun getCurrentPlayer(callback: (Int) -> Unit) {
-//        turnRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val currentPlayer = dataSnapshot.getValue(Int::class.java) ?: 1
-//                callback(currentPlayer)
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                // Handle errors
-//            }
-//        })
-//    }
-//
-//    fun switchPlayer() {
-//        getCurrentPlayer { currentPlayer ->
-//            val nextPlayer = if (currentPlayer == 1) 2 else 1
-//            turnRef.setValue(nextPlayer)
-//        }
-//    }
+        updateState { currentState ->
+            currentState.copy(
+                gameState = gameState,
+                isTurn = gameSession.isTurn
+            )
+        }
+    }
 
     fun onButtonClick(buttonIndex: Int) {
         val currentState = _state.value
-
-//        getCurrentPlayer { player ->
-//            val currentState = _state.value
-//            val currentPlayer = if (player == 1) {
-//                currentState.firstPlayerUiState
-//            } else {
-//                currentState.secondPlayerUiState
-//            }}
-        val currentPlayer = if (currentState.gameState.count { it.image == null } % 2 == 0) {
-            currentState.firstPlayerUiState
-        } else {
-            currentState.secondPlayerUiState
-        }
-
         val currentGameState = currentState.gameState.toMutableList()
         val currentButtonState = currentGameState[buttonIndex]
 
-        if (currentButtonState.enabled) {
-            val updatedButtonState = updateButtonState(currentButtonState, currentPlayer.playerRole)
-            currentGameState.removeAt(buttonIndex)
-            currentGameState.add(buttonIndex,updatedButtonState)
-
-            Log.d("GameViewModel", "currentButtonState $currentButtonState")
+        if (currentButtonState.enabled && currentButtonState.image == null) {
+            val currentPlayerIcon = currentState.currentPlayerIcon
+            val updatedButtonState = updateButtonState(currentButtonState, currentPlayerIcon)
+            currentGameState[buttonIndex] = updatedButtonState
 
             val updatedState = currentState.copy(gameState = currentGameState.toList())
-            _state.update { updatedState }
-            Log.d("GameViewModel", "updatedState $updatedState ")
 
-            Log.d("GameViewModel", "Button $buttonIndex clicked by ${currentPlayer.playerName}")
+            // Update the game board state
+            val updatedBoard = updateGameBoard(currentState.board, buttonIndex, currentPlayerIcon)
+            val updatedStateWithBoard = updatedState.copy(board = updatedBoard)
 
-            if (checkWin(currentPlayer.playerRole)) {
-                val winner = determineWinner(currentState, currentPlayer.playerRole)
-                val updatedWinner = updatePlayerAsWinner(currentState, winner)
+            _state.update { updatedStateWithBoard }
+            viewModelScope.launch {
+                XORepository.updateBoard(args.gameId!!, updatedBoard)
+            }
 
-                _state.value = updatedState.copy(
-                    firstPlayerUiState = updatedWinner.firstPlayerUiState,
-                    secondPlayerUiState = updatedWinner.secondPlayerUiState
-                )
-
-                Log.d("GameViewModel", "Player ${winner.playerName} wins!")
-            } else if (isGameTied(updatedState)) {
-                _state.value = updatedState.copy(isTied = true)
+            if (checkWin(updatedStateWithBoard, currentPlayerIcon)) {
+                val winnerIcon = if (currentPlayerIcon == currentState.firstPlayerIcon) currentState.firstPlayerIcon else currentState.secondPlayerIcon
+                val updatedWinner = updatePlayerAsWinner(updatedStateWithBoard, winnerIcon)
+                _state.update { updatedWinner }
+                Log.d("GameViewModel", "Player ${currentState.currentPlayerName} wins!")
+            } else if (isGameTied(updatedStateWithBoard)) {
+                _state.update { it.copy(isTied = true) }
                 Log.d("GameViewModel", "The game is tied!")
             }
+
+            // Switch turn
+            _state.update { currentState.copy(isTurn = !currentState.isTurn) }
         } else {
-//            switchPlayer()
             Log.d("GameViewModel", "Button $buttonIndex is disabled")
         }
     }
 
-    private fun isGameTied(currentState: GameUiState): Boolean {
-        return currentState.gameState.none { it.enabled }
+    private fun updateGameBoard(
+        currentBoard: List<List<Int>>,
+        buttonIndex: Int,
+        currentPlayerIcon: Int
+    ): List<List<Int>> {
+        val updatedBoard = currentBoard.toMutableList()
+
+        val row = buttonIndex / 3
+        val column = buttonIndex % 3
+
+        val rowList = updatedBoard[row].toMutableList()
+        rowList[column] = if (currentPlayerIcon == R.drawable.x_icon) R.drawable.x_icon else R.drawable.o_icon
+
+        updatedBoard[row] = rowList
+
+        return updatedBoard
     }
 
-    private fun updateButtonState(buttonState: ButtonState, playerRole: Int):ButtonState {
-        return buttonState.copy(  image = playerRole ,enabled = false)
+    private fun updateButtonState(buttonState: ButtonState, playerIcon: Int): ButtonState {
+        return buttonState.copy(image = playerIcon, enabled = false)
     }
 
-    private fun determineWinner(currentState: GameUiState, playerRole: Int): PlayerUiState {
-        return if (playerRole == currentState.firstPlayerUiState.playerRole) {
-            currentState.firstPlayerUiState
-        } else {
-            currentState.secondPlayerUiState
-        }
-    }
+    private fun checkWin(currentState: GameUiState, playerIcon: Int): Boolean {
+        val gameState = currentState.gameState
+        val linesToCheck =
+            currentState.horizontalLines + currentState.verticalLines + currentState.diagonalLines
 
-    private fun updatePlayerAsWinner(
-        currentState: GameUiState,
-        winner: PlayerUiState
-    ): GameUiState {
-        val updatedFirstPlayer =
-            currentState.firstPlayerUiState.copy(isWinner = winner == currentState.firstPlayerUiState)
-        val updatedSecondPlayer =
-            currentState.secondPlayerUiState.copy(isWinner = winner == currentState.secondPlayerUiState)
-        return currentState.copy(
-            firstPlayerUiState = updatedFirstPlayer,
-            secondPlayerUiState = updatedSecondPlayer
-        )
-    }
-
-    private fun checkWin(playerRole: Int): Boolean {
-        val gameState = _state.value.gameState
-        val horizontalLines = _state.value.horizontalLines
-        val verticalLines = _state.value.verticalLines
-        val diagonalLines = _state.value.diagonalLines
-
-        for (line in horizontalLines + verticalLines + diagonalLines) {
-            if (line.all { gameState[it].image == playerRole }) {
-                _state.value = _state.value.copy(winningLine = line)
+        for (line in linesToCheck) {
+            val lineValues = line.map { gameState[it].image }
+            if (lineValues.all { it == playerIcon }) {
+                currentState.winningLine = line
                 return true
             }
         }
+
         return false
     }
 
+    private fun isGameTied(currentState: GameUiState): Boolean {
+        return currentState.gameState.none { it.enabled && it.image == null }
+    }
+
+    private fun updatePlayerAsWinner(currentState: GameUiState, winner: Int): GameUiState {
+        return currentState.copy(
+            winner = winner,
+            winningLine = null
+        )
+    }
+
+    private fun getCurrentPlayerIcon(gameSession: GameSession): Int {
+        val currentState = _state.value
+        return if (gameSession.firstPlayerName == currentState.currentPlayerName) {
+            currentState.firstPlayerIcon
+        } else {
+            currentState.secondPlayerIcon
+        }
+    }
+
+    private fun getWinner(gameSession: GameSession): Int? {
+        val currentState = _state.value
+        return if (gameSession.winner == 1) {
+            currentState.firstPlayerIcon
+        } else if (gameSession.winner == 2) {
+            currentState.secondPlayerIcon
+        } else {
+            null
+        }
+    }
 }

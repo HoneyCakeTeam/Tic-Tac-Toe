@@ -41,33 +41,36 @@ fun GameBoard(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            for (row in 0..2) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .aspectRatio(1f)
-                ) {
-                    for (col in 0..2) {
-                        val index = row * 3 + col
-                        val buttonState = state.gameState[index]
-                        Log.e("TAG", "GameCell:${buttonState}")
+            if (state.gameState.isNotEmpty()) {
+                for (row in 0..2) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .aspectRatio(1f)
+                    ) {
+                        for (col in 0..2) {
+                            val index = row * 3 + col
+                            if (index < state.gameState.size) {
+                                val buttonState = state.gameState[index]
+                                Log.e("TAG", "GameCell:${buttonState}")
 
-                        GameCell(
-                            onButtonClicked = {
-                                Log.e("TAG", "GameCell:${index} ")
-                                onButtonClicked(index)
-                            },
-                            imageResource = buttonState.image,
-                            isEnabled = buttonState.enabled
-                        )
+                                GameCell(
+                                    onButtonClicked = {
+                                        Log.e("TAG", "GameCell:${index} ")
+                                        onButtonClicked(index)
+                                    },
+                                    imageResource = buttonState.image,
+                                    isEnabled = buttonState.enabled
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -78,6 +81,7 @@ fun GameBoard(
         )
     }
 }
+
 
 @Preview
 @Composable

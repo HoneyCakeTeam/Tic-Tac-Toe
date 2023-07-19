@@ -34,10 +34,10 @@ class CreateGameViewModel @Inject constructor(
     private fun saveGameSession() {
         updateState { it.copy(gameId = generateUniqueKey()) }
         val gameSession = GameSession(
-            _state.value.firstPlayerName,
-            "",
-            false,
-            _state.value.gameId
+            firstPlayerName = _state.value.firstPlayerName,
+            secondPlayerName = "",
+            isGameLoaded = false,
+            gameId = _state.value.gameId
         )
         viewModelScope.launch {
             xORepository.saveGameSession(gameSession)
