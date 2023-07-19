@@ -35,7 +35,7 @@ fun PlayersInfo(state: GameUiState) {
                 id = state.firstPlayerImage
             ),
             role = painterResource(id = state.firstPlayerRole),
-            isSelected = true
+            isSelected = state.isFirstPlayerSelected
         )
 
         Text(text = stringResource(R.string.vs), style = Typography.displayMedium)
@@ -46,7 +46,7 @@ fun PlayersInfo(state: GameUiState) {
                 id = state.secondPlayerImage
             ),
             role = painterResource(id = state.secondPlayerRole),
-            isSelected = true
+            isSelected = state.isSecondPlayerSelected
         )
     }
 }

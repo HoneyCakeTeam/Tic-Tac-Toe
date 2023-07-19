@@ -27,8 +27,11 @@ data class GameUiState(
     ),
     val winningLine: List<Int>? = null,
     val isTied: Boolean = false,
-    val firstPlayerTurn: Int = 1,
-    val secondPlayerTurn: Int = 2,
+    val PlayerTurn: Int = 1,
+    val isFirstPlayerSelected: Boolean = false,
+    val isSecondPlayerSelected: Boolean = false,
+    val firstPlayerGameState: List<ButtonState> = List(9) { ButtonState(null, true)},
+    val secondPlayerGameState: List<ButtonState> = List(9) { ButtonState(null, true)},
     val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
     )
 

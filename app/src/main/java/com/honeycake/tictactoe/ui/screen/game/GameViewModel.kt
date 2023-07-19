@@ -30,7 +30,8 @@ class GameViewModel @Inject constructor(
                 if (gameSession.firstPlayerName.isNotEmpty() || gameSession.secondPlayerName.isNotEmpty()){
                     updateState { it.copy(
                         firstPlayerName = gameSession.firstPlayerName,
-                        secondPlayerName = gameSession.secondPlayerName
+                        secondPlayerName = gameSession.secondPlayerName,
+                        PlayerTurn = 1
                     ) }
                 }
             }
@@ -48,17 +49,29 @@ class GameViewModel @Inject constructor(
 
     }
 
-//    private fun playerTurn(){
-//        if(state.value.playerTurn == 1){
+    private fun playerTurn(){
+        when (state.value.PlayerTurn) {
+            1 -> {
+                updateState { it.copy(isFirstPlayerSelected = true, isSecondPlayerSelected = false) }
+            }
+            2 -> {
+                updateState { it.copy(isSecondPlayerSelected = true, isFirstPlayerSelected = false) }
+            }
+        }
+        switchPlayer()
+    }
+
+    private fun switchPlayer() {
+        if (state.value.PlayerTurn == 1) {
+            updateState { it.copy( PlayerTurn = 2 ) }
+        }else
+            updateState { it.copy( PlayerTurn = 1 ) }
+    }
+
+//    private val database = FirebaseDatabase.getInstance()
 //
-//        }else{
-//        }
-//    }
-
-    private val database = FirebaseDatabase.getInstance()
-
-    private val turnRef = database.getReference("GameSession")
-        .child("071906433798066").child("Turn")
+//    private val turnRef = database.getReference("GameSession")
+//        .child("071906433798066").child("Turn")
 
 
 //    fun initializeGameSession() {
@@ -78,15 +91,15 @@ class GameViewModel @Inject constructor(
 //        })
 //    }
 //
-//    fun switchPlayer() {
-//        getCurrentPlayer { currentPlayer ->
-//            val nextPlayer = if (currentPlayer == 1) 2 else 1
-//            turnRef.setValue(nextPlayer)
-//        }
-//    }
+
 
     fun onButtonClick(buttonIndex: Int) {
-        val currentState = _state.value
+        playerTurn()
+
+
+
+
+//        val currentState = _state.value
 
 //        getCurrentPlayer { player ->
 //            val currentState = _state.value
