@@ -2,15 +2,11 @@ package com.honeycake.tictactoe.ui.screen.game
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.honeycake.tictactoe.data.GameSession
+import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
-import com.honeycake.tictactoe.ui.screen.load_game.LoadArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,7 +30,19 @@ class GameViewModel @Inject constructor(
                 firstPlayerUiState = PlayerUiState(playerName = gameSession.firstPlayerName),
                 secondPlayerUiState = PlayerUiState(playerName = gameSession.secondPlayerName)
             ) }
+            getRole()
         }
+    }
+
+    private fun getRole() {
+        val rand = (0..1).random()
+        if (rand == 1){
+            updateState { it.copy(firstPlayerUiState = PlayerUiState(playerRole = R.drawable.x_icon)) }
+        }
+        else{
+            updateState { it.copy(secondPlayerUiState = PlayerUiState(playerRole = R.drawable.o_icon)) }
+        }
+
     }
 
     fun onButtonClick(buttonIndex: Int) {

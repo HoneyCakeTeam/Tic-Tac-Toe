@@ -7,9 +7,9 @@ import com.honeycake.tictactoe.R
  */
 data class GameUiState(
     val isTied: Boolean = false,
-    val firstPlayerUiState: PlayerUiState = PlayerUiState("Mo Naser", R.drawable.x_icon, R.drawable.gamer, false),
-    val secondPlayerUiState: PlayerUiState = PlayerUiState("Nasser", R.drawable.o_icon, R.drawable.gamer, false),
-    val gameState: List<ButtonState> = listOf(ButtonState(null, true)),
+    val firstPlayerUiState: PlayerUiState = PlayerUiState("", R.drawable.x_icon, R.drawable.gamer, false),
+    val secondPlayerUiState: PlayerUiState = PlayerUiState("", R.drawable.o_icon, R.drawable.gamer, false),
+    val gameState: List<ButtonState> = List(9) { ButtonState(null, true)},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
         listOf(3, 4, 5),
