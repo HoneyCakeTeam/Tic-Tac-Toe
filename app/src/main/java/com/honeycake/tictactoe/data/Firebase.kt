@@ -10,4 +10,5 @@ interface Firebase {
 
     fun getNotify(id: String):  Flow<GameSession>
 
+    suspend fun switchPlayer(id: String, currentPlayer: Int)
 }

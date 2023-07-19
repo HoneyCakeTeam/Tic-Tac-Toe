@@ -2,7 +2,6 @@ package com.honeycake.tictactoe.ui.screen.game
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.database.FirebaseDatabase
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
@@ -31,7 +30,7 @@ class GameViewModel @Inject constructor(
                     updateState { it.copy(
                         firstPlayerName = gameSession.firstPlayerName,
                         secondPlayerName = gameSession.secondPlayerName,
-                        PlayerTurn = 1
+                        PlayerTurn = gameSession.currentPlayer
                     ) }
                 }
             }
@@ -54,8 +53,14 @@ class GameViewModel @Inject constructor(
             1 -> {
                 updateState { it.copy(isFirstPlayerSelected = true, isSecondPlayerSelected = false) }
             }
+
             2 -> {
-                updateState { it.copy(isSecondPlayerSelected = true, isFirstPlayerSelected = false) }
+                updateState {
+                    it.copy(
+                        isSecondPlayerSelected = true,
+                        isFirstPlayerSelected = false
+                    )
+                }
             }
         }
         switchPlayer()
@@ -63,10 +68,15 @@ class GameViewModel @Inject constructor(
 
     private fun switchPlayer() {
         if (state.value.PlayerTurn == 1) {
-            updateState { it.copy( PlayerTurn = 2 ) }
-        }else
-            updateState { it.copy( PlayerTurn = 1 ) }
+            viewModelScope.launch {
+                XORepository.switchPlayer(gameId = args.gameId!!, currentPlayer = 2)
+            }
+        } else
+            viewModelScope.launch {
+                XORepository.switchPlayer(gameId = args.gameId!!, currentPlayer = 1)
+            }
     }
+
 
 //    private val database = FirebaseDatabase.getInstance()
 //
@@ -95,6 +105,8 @@ class GameViewModel @Inject constructor(
 
     fun onButtonClick(buttonIndex: Int) {
         playerTurn()
+
+        switchPlayer()
 
 
 

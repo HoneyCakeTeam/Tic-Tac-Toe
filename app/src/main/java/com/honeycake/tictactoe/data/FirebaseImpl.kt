@@ -14,6 +14,12 @@ class FirebaseImpl : Firebase {
     override suspend fun write(gameSession: GameSession) {
         game.child(gameSession.gameId).setValue(gameSession)
     }
+    override suspend fun switchPlayer(id: String , currentPlayer :Int){
+       val currentPlayerRef = game.child(id).child("currentPlayer")
+        currentPlayerRef.setValue(currentPlayer)
+
+    }
+
 
     override suspend fun read(id: String): GameSession {
         val gameSessionRef = game.child(id)
@@ -23,7 +29,7 @@ class FirebaseImpl : Firebase {
         val gameSession = GameSession(
             firstPlayerName = initialData?.get("firstPlayerName") as String? ?: "",
             secondPlayerName = initialData?.get("secondPlayerName") as String? ?: "",
-            isGameCompleted = initialData?.get("isGameCompleted") as Boolean? ?: false,
+            isGameReady = initialData?.get("isGameReady") as Boolean? ?: false,
             gameId = initialData?.get("gameId") as String? ?: ""
         )
 
@@ -33,7 +39,7 @@ class FirebaseImpl : Firebase {
                 val updatedGameSession = gameSession.copy(
                     firstPlayerName = updatedData?.get("firstPlayerName") as String? ?: gameSession.firstPlayerName,
                     secondPlayerName = updatedData?.get("secondPlayerName") as String? ?: gameSession.secondPlayerName,
-                    isGameCompleted = updatedData?.get("isGameCompleted") as Boolean? ?: gameSession.isGameCompleted,
+                    isGameReady = updatedData?.get("isGameReady") as Boolean? ?: gameSession.isGameReady,
                     gameId = updatedData?.get("gameId") as String? ?: gameSession.gameId
                 )
 
@@ -49,7 +55,7 @@ class FirebaseImpl : Firebase {
 
     override suspend fun update(gameSession: GameSession): Boolean {
             game.child(gameSession.gameId).get().addOnSuccessListener {
-                val isGameBusy = it.child("isGameCompleted").getValue(Boolean::class.java) ?: false
+                val isGameBusy = it.child("isGameReady").getValue(Boolean::class.java) ?: false
                 if (it.exists()&& !isGameBusy){
                     val firstPlayerName = it.child("firstPlayerName").getValue(String::class.java) ?: ""
                     val newGameSession = gameSession.copy(firstPlayerName = firstPlayerName)

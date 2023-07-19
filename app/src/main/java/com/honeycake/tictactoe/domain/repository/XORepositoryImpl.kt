@@ -1,5 +1,6 @@
 package com.honeycake.tictactoe.domain.repository
 
+import android.media.AsyncPlayer
 import com.honeycake.tictactoe.data.Firebase
 import com.honeycake.tictactoe.data.GameSession
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,10 @@ class XORepositoryImpl @Inject constructor(
 
     override suspend fun loadData(gameId:String): Flow<GameSession> {
         return database.getNotify(gameId)
+    }
+
+    override suspend fun switchPlayer(gameId: String, currentPlayer: Int) {
+        return database.switchPlayer(id = gameId , currentPlayer =currentPlayer)
     }
 
     override fun notifyGameSessionChanges(gameId: String): Flow<GameSession> {
