@@ -10,6 +10,6 @@ interface Firebase {
 
     fun getNotify(id: String):  Flow<GameSession>
 
-    suspend fun updateBoard(gameId: String, updatedBoard: List<List<Int>>)
+    suspend fun updateBoard(gameId: String, updatedBoard: List<Int>)
     suspend fun readGameSession(gameId: String): GameSession
 }

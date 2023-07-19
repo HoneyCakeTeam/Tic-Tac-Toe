@@ -54,8 +54,8 @@ class FirebaseImpl : Firebase {
         val snapshot = game.child(gameId).get().await()
         return snapshot.getValue(GameSession::class.java) ?: GameSession()
     }
-    override suspend fun updateBoard(gameId: String, updatedBoard: List<List<Int>>) {
-        val boardRef = game.child(gameId).child("gameState")
+    override suspend fun updateBoard(gameId: String, updatedBoard: List<Int>) {
+        val boardRef = game.child(gameId).child("board")
         boardRef.setValue(updatedBoard).await()
     }
 
