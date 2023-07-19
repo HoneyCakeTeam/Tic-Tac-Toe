@@ -2,7 +2,6 @@ package com.honeycake.tictactoe.ui.screen.game
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,7 +10,6 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.LocalNavigationProvider
@@ -19,29 +17,30 @@ import com.honeycake.tictactoe.ui.composable.IconBack
 import com.honeycake.tictactoe.ui.screen.game.composable.GameBoard
 import com.honeycake.tictactoe.ui.screen.game.composable.PlayersInfo
 
-/**
- * Created by Aziza Helmy on 7/12/2023.
- */
 @Composable
 fun GameScreen(gameViewModel: GameViewModel = hiltViewModel()) {
     val gameUiState by gameViewModel.state.collectAsState()
+    val navController = LocalNavigationProvider.current
 
-    GameContent(gameUiState, onButtonClicked = gameViewModel::onButtonClick)
+    GameContent(
+        gameUiState,
+        onButtonClicked = gameViewModel::onButtonClick,
+        onClickBackButton = { navController.popBackStack() }
+    )
 }
 
 @Composable
-private fun GameContent(gameUiState: GameUiState, onButtonClicked: (Int) -> Unit) {
-    // this will be an event in view model 'onCLickBackButton()'
-    val navController = LocalNavigationProvider.current
+private fun GameContent(
+    gameUiState: GameUiState,
+    onButtonClicked: (Int) -> Unit,
+    onClickBackButton: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .paint(painterResource(id = R.drawable.background), contentScale = ContentScale.Crop)
     ) {
-        IconBack(
-            painter = painterResource(id = R.drawable.arrow_left),
-            modifier = Modifier.padding(16.dp)
-        ) { navController.popBackStack() }
+        IconBack(onClick = onClickBackButton)
         PlayersInfo(gameUiState)
         GameBoard(gameUiState, onButtonClicked = onButtonClicked)
     }

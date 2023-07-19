@@ -23,15 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.screen.game.GameUiState
 
-/**
- * Created by Aziza Helmy on 7/14/2023.
- */
-
-
 @Composable
 fun GameBoard(
     state: GameUiState,
-    onButtonClicked: (Int) -> Unit
+    onButtonClicked: (Int) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -45,8 +40,6 @@ fun GameBoard(
             ),
         contentAlignment = Alignment.Center
     ) {
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -79,7 +72,6 @@ fun GameBoard(
                 }
             }
         }
-
         Image(
             painter = painterResource(id = R.drawable.icon_game_structure),
             contentDescription = "image structure"
