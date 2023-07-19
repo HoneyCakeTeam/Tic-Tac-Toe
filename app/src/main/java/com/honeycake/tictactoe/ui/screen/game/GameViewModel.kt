@@ -3,6 +3,7 @@ package com.honeycake.tictactoe.ui.screen.game
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.FirebaseDatabase
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.domain.repository.XORepository
 import com.honeycake.tictactoe.ui.base.BaseViewModel
@@ -25,28 +26,69 @@ class GameViewModel @Inject constructor(
 
     private fun loadData(gameId:String){
         viewModelScope.launch{
-           val gameSession =  XORepository.loadData(gameId)
-            updateState { it.copy(
-                firstPlayerUiState = PlayerUiState(playerName = gameSession.firstPlayerName),
-                secondPlayerUiState = PlayerUiState(playerName = gameSession.secondPlayerName)
-            ) }
+            val gameSession = XORepository.loadData(gameId)
+            updateState { currentState ->
+                currentState.copy(
+                    firstPlayerUiState = currentState.firstPlayerUiState
+                        .copy(playerName = gameSession.firstPlayerName),
+                    secondPlayerUiState = currentState.secondPlayerUiState
+                        .copy(playerName = gameSession.secondPlayerName)
+                )
+            }
             getRole()
         }
     }
 
     private fun getRole() {
         val rand = (0..1).random()
-        if (rand == 1){
+        if (rand == 1) {
             updateState { it.copy(firstPlayerUiState = PlayerUiState(playerRole = R.drawable.x_icon)) }
-        }
-        else{
+        } else {
             updateState { it.copy(secondPlayerUiState = PlayerUiState(playerRole = R.drawable.o_icon)) }
         }
 
     }
 
+    private val database = FirebaseDatabase.getInstance()
+
+    private val turnRef = database.getReference("GameSession")
+        .child("071906433798066").child("Turn")
+
+
+//    fun initializeGameSession() {
+//        turnRef.setValue(1)
+//    }
+//
+//    fun getCurrentPlayer(callback: (Int) -> Unit) {
+//        turnRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                val currentPlayer = dataSnapshot.getValue(Int::class.java) ?: 1
+//                callback(currentPlayer)
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                // Handle errors
+//            }
+//        })
+//    }
+//
+//    fun switchPlayer() {
+//        getCurrentPlayer { currentPlayer ->
+//            val nextPlayer = if (currentPlayer == 1) 2 else 1
+//            turnRef.setValue(nextPlayer)
+//        }
+//    }
+
     fun onButtonClick(buttonIndex: Int) {
         val currentState = _state.value
+
+//        getCurrentPlayer { player ->
+//            val currentState = _state.value
+//            val currentPlayer = if (player == 1) {
+//                currentState.firstPlayerUiState
+//            } else {
+//                currentState.secondPlayerUiState
+//            }}
         val currentPlayer = if (currentState.gameState.count { it.image == null } % 2 == 0) {
             currentState.firstPlayerUiState
         } else {
@@ -84,6 +126,7 @@ class GameViewModel @Inject constructor(
                 Log.d("GameViewModel", "The game is tied!")
             }
         } else {
+//            switchPlayer()
             Log.d("GameViewModel", "Button $buttonIndex is disabled")
         }
     }
