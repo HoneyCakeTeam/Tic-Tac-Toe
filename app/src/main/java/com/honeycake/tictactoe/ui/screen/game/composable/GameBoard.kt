@@ -3,6 +3,7 @@ package com.honeycake.tictactoe.ui.screen.game.composable
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ fun GameBoard(
                 color = Color.White,
                 shape = RoundedCornerShape(16.dp)
             ),
+
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -58,6 +60,7 @@ fun GameBoard(
                     for (col in 0..2) {
                         val index = row * 3 + col
                         val buttonState = state.gameState[index]
+                        val gameState = !(state.secondPlayerUiState.isWinner || state.firstPlayerUiState.isWinner)
                         Log.e("TAG", "GameCell:${buttonState}")
 
                         GameCell(
@@ -66,7 +69,8 @@ fun GameBoard(
                                 onButtonClicked(index)
                             },
                             imageResource = buttonState.image,
-                            isEnabled = buttonState.enabled
+                            isEnabled = gameState,
+
                         )
                     }
                 }
