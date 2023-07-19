@@ -57,7 +57,7 @@ fun GameBoard(
                 ) {
                     for (col in 0..2) {
                         val index = row * 3 + col
-                        val buttonState = state.gameState[index]
+                        val buttonState = state.board[index]
                         Log.e("TAG", "GameCell:${buttonState}")
 
                         GameCell(

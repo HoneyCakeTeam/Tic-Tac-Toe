@@ -58,7 +58,6 @@ class GameViewModel @Inject constructor(
                         isFirstPlayerSelected = true,
                         isSecondPlayerSelected = false,
                         image = R.drawable.x_icon,
-                        enabled = false
                     )
                 }
             }
@@ -69,7 +68,6 @@ class GameViewModel @Inject constructor(
                         isSecondPlayerSelected = true,
                         isFirstPlayerSelected = false,
                         image = R.drawable.o_icon,
-                        enabled = false
                     )
                 }
             }
@@ -115,14 +113,25 @@ class GameViewModel @Inject constructor(
 
 
     fun updateBoard(buttonIndex: Int){
-        viewModelScope.launch {
-            XORepository.updateBoard(args.gameId!!,)
-        }
-    }
-    fun onButtonClick(buttonIndex: Int) {
-        playerTurn()
+        val currentGameState = state.value.board.toMutableList()
+        val currentValue = currentGameState[buttonIndex]
 
-        switchPlayer()
+        if (currentValue == 0) {
+            currentGameState[buttonIndex] = state.value.PlayerTurn
+
+            updateState { it.copy(board = currentGameState.toList()
+                , enabled = false) }
+            viewModelScope.launch {
+                XORepository.updateBoard(args.gameId!!, currentGameState)
+            }
+        }
+
+    }
+        fun onButtonClick(buttonIndex: Int) {
+            playerTurn()
+            updateBoard(buttonIndex)
+
+            switchPlayer()
 
 
 //        val currentState = _state.value
