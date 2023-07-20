@@ -7,7 +7,9 @@ import com.honeycake.tictactoe.ui.navigation.Screen
 
 private val ROUTE = Screen.Home.route
 fun NavController.navigateToHome() {
-    navigate(ROUTE)
+    navigate(ROUTE){
+        this.popUpTo(ROUTE)
+    }
 }
 
 fun NavGraphBuilder.homeRoute() {

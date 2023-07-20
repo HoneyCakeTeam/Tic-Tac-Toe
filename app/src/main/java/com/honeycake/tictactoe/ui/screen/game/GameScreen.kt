@@ -16,6 +16,7 @@ import com.honeycake.tictactoe.ui.LocalNavigationProvider
 import com.honeycake.tictactoe.ui.composable.IconBack
 import com.honeycake.tictactoe.ui.screen.game.composable.GameBoard
 import com.honeycake.tictactoe.ui.screen.game.composable.PlayersInfo
+import com.honeycake.tictactoe.ui.screen.home.navigateToHome
 
 @Composable
 fun GameScreen(gameViewModel: GameViewModel = hiltViewModel()) {
@@ -25,7 +26,7 @@ fun GameScreen(gameViewModel: GameViewModel = hiltViewModel()) {
     GameContent(
         gameUiState,
         onButtonClicked = gameViewModel::onButtonClick,
-        onClickBackButton = { navController.popBackStack() }
+        onClickBackButton = { navController.navigateToHome() }
     )
 }
 
