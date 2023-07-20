@@ -3,6 +3,7 @@ package com.honeycake.tictactoe.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Primary = Color(0xFF191E93)
+val Primary38  = Color(0x61191E93)
 val Secondary = Color(0x6105AAEB)
 
 val Card = Color(0xFFFFFFFF)

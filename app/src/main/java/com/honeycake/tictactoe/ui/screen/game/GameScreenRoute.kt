@@ -22,14 +22,12 @@ fun NavGraphBuilder.gameRoute() {
             navArgument(GameArgs.GAME_ROLE) {
                 type = NavType.IntType
             },
-
             )
     ) { GameScreen() }
 }
 class GameArgs(savedStateHandle: SavedStateHandle) {
     val gameId: String? = savedStateHandle[GAME_ID_ARGS]
     val role: Int? = savedStateHandle[GAME_ROLE]
-
 
     companion object {
         const val GAME_ID_ARGS = "gameId"

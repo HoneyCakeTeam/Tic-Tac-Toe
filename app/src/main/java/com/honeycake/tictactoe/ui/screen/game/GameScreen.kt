@@ -64,10 +64,3 @@ private fun GameContent(
         }
     }
 }
-
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewGameScreen() {
-    GameScreen()
-}

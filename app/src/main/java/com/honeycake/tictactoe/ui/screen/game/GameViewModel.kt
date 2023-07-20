@@ -53,7 +53,6 @@ class GameViewModel @Inject constructor(
                     )
                 }
             }
-
             2 -> {
                 updateState {
                     it.copy(
@@ -76,11 +75,9 @@ class GameViewModel @Inject constructor(
             }
     }
 
-
     private fun updateBoard(buttonIndex: Int) {
         val currentGameState = state.value.board.toMutableList()
         val currentValue = currentGameState[buttonIndex]
-
         if (currentValue == 0) {
             currentGameState[buttonIndex] = state.value.currentPlayer
             updateState {
@@ -121,7 +118,6 @@ class GameViewModel @Inject constructor(
         val horizontalLines = _state.value.horizontalLines
         val verticalLines = _state.value.verticalLines
         val diagonalLines = _state.value.diagonalLines
-
         for (line in horizontalLines + verticalLines + diagonalLines) {
             if (line.all { gameState[it] == playerRole }) {
                 _state.value = _state.value.copy(winningLine = line)

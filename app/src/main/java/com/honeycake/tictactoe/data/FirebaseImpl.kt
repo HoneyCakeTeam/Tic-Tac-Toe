@@ -14,44 +14,12 @@ class FirebaseImpl : Firebase {
     override suspend fun write(gameSession: GameSession) {
         game.child(gameSession.gameId).setValue(gameSession)
     }
+
     override suspend fun switchPlayer(id: String , currentPlayer :Int){
        val currentPlayerRef = game.child(id).child("currentPlayer")
         currentPlayerRef.setValue(currentPlayer)
-
     }
 
-
-    override suspend fun read(id: String): GameSession {
-        val gameSessionRef = game.child(id)
-        val gameSessionSnapshot = gameSessionRef.get().await()
-
-        val initialData = gameSessionSnapshot.value as Map<*, *>?
-        val gameSession = GameSession(
-            firstPlayerName = initialData?.get("firstPlayerName") as String? ?: "",
-            secondPlayerName = initialData?.get("secondPlayerName") as String? ?: "",
-            isGameReady = initialData?.get("isGameReady") as Boolean? ?: false,
-            gameId = initialData?.get("gameId") as String? ?: ""
-        )
-
-        gameSessionRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val updatedData = dataSnapshot.value as Map<*, *>?
-                val updatedGameSession = gameSession.copy(
-                    firstPlayerName = updatedData?.get("firstPlayerName") as String? ?: gameSession.firstPlayerName,
-                    secondPlayerName = updatedData?.get("secondPlayerName") as String? ?: gameSession.secondPlayerName,
-                    isGameReady = updatedData?.get("isGameReady") as Boolean? ?: gameSession.isGameReady,
-                    gameId = updatedData?.get("gameId") as String? ?: gameSession.gameId
-                )
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
-            }
-        })
-
-        return gameSession
-    }
     override suspend fun updateBoard(gameId: String, updatedBoard: List<Int>) {
         val boardRef = game.child(gameId).child("board")
         boardRef.setValue(updatedBoard).await()
@@ -68,7 +36,7 @@ class FirebaseImpl : Firebase {
                     )
                     game.updateChildren(childUpdates)
                 } else{
-                    //TODO throw custom exception
+                    throw Exception()
                 }
             }.addOnFailureListener{
                throw it
@@ -82,15 +50,11 @@ class FirebaseImpl : Firebase {
                 val gameSession = dataSnapshot.children
                     .mapNotNull { it.getValue(GameSession::class.java) }
                     .first { it.gameId == id }
-
                 trySend(gameSession).isSuccess
             }
-
             override fun onCancelled(error: DatabaseError) {
-                // handle error
             }
         })
-
         awaitClose { game.removeEventListener(listener) }
     }
 

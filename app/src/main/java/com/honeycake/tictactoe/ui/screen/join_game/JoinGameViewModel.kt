@@ -1,6 +1,5 @@
 package com.honeycake.tictactoe.ui.screen.join_game
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.honeycake.tictactoe.data.GameSession
 import com.honeycake.tictactoe.domain.repository.XORepository
@@ -31,7 +30,6 @@ class JoinGameViewModel @Inject constructor(
                     updateState { it.copy(navigate = true) }
                 }
             }catch (e: Throwable){
-                Log.e("TAG", "onJoinGameClicked: ${e.message}", )
             }
         }
 

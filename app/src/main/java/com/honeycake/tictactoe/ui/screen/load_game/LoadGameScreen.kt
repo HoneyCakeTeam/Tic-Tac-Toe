@@ -41,7 +41,6 @@ fun LoadGameScreen(
         }
     }
 
-
     LoadGameContent(
         gameId = state.gameId,
         onClickCopyIcon = { viewModel.onClickCopyIcon(localClipboardManager) })
