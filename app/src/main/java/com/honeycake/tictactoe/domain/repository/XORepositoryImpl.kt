@@ -12,8 +12,12 @@ class XORepositoryImpl @Inject constructor(
         database.write(gameSession)
     }
 
-    override suspend fun getGameId(name: String): String {
-        return database.read(name)
+    override suspend fun loadData(gameId:String): Flow<GameSession> {
+        return database.getNotify(gameId)
+    }
+
+    override suspend fun switchPlayer(gameId: String, currentPlayer: Int) {
+        return database.switchPlayer(id = gameId , currentPlayer =currentPlayer)
     }
 
     override fun notifyGameSessionChanges(gameId: String): Flow<GameSession> {
@@ -22,5 +26,9 @@ class XORepositoryImpl @Inject constructor(
 
     override suspend fun updateGameSession(gameSession: GameSession): Boolean {
         return database.update(gameSession)
+    }
+
+    override suspend fun updateBoard(gameId: String, updatedBoard: List<Int>) {
+        database.updateBoard(gameId, updatedBoard)
     }
 }

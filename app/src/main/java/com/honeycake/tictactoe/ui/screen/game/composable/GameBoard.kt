@@ -23,15 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.honeycake.tictactoe.R
 import com.honeycake.tictactoe.ui.screen.game.GameUiState
 
-/**
- * Created by Aziza Helmy on 7/14/2023.
- */
-
-
 @Composable
 fun GameBoard(
     state: GameUiState,
-    onButtonClicked: () -> Unit
+    onButtonClicked: (Int) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -45,8 +40,7 @@ fun GameBoard(
             ),
         contentAlignment = Alignment.Center
     ) {
-
-
+        Log.e("Sara",state.board.toString())
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -59,21 +53,30 @@ fun GameBoard(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f).aspectRatio(1f)
+                        .weight(1f)
+                        .aspectRatio(1f)
                 ) {
                     for (col in 0..2) {
                         val index = row * 3 + col
+                        val image =when(state.board[index]){
+                            0 -> null
+                            1 -> R.drawable.x_icon
+                            else -> R.drawable.o_icon
 
-                        val buttonState = state.gameState[index]
-                        GameCell(onButtonClicked = {
-                            Log.e("TAG", "GameCell:${index} ")
-                            onButtonClicked()
-                        }, image = R.drawable.x_icon)
+                        }
+
+                        GameCell(
+                            onButtonClicked = {
+                                Log.e("TAG", "GameCell:${index} ")
+                                onButtonClicked(index)
+                            },
+                            imageResource = image,
+                            isEnabled = state.enabled
+                        )
                     }
                 }
             }
         }
-
         Image(
             painter = painterResource(id = R.drawable.icon_game_structure),
             contentDescription = "image structure"

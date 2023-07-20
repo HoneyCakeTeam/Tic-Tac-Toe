@@ -33,7 +33,7 @@ fun JoinGameScreen(
     )
     LaunchedEffect(key1 = state.navigate, block = {
         if (state.navigate) {
-            navController.navigateToGame(state.gameId)
+            navController.navigateToGame(state.gameId,2)
         }
     })
 }

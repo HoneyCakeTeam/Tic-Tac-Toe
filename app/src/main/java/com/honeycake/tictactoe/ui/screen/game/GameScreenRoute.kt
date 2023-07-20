@@ -9,21 +9,28 @@ import androidx.navigation.navArgument
 import com.honeycake.tictactoe.ui.navigation.Screen
 
 private val ROUTE = Screen.Game.route
-fun NavController.navigateToGame(gameId: String) {
-    navigate("${ROUTE}/$gameId")
+fun NavController.navigateToGame(gameId: String, role: Int) {
+    navigate("${ROUTE}/$gameId/$role")
 }
 
 fun NavGraphBuilder.gameRoute() {
     composable(
-        "${ROUTE}/{${GameArgs.GAME_ID_ARGS}}",
-        arguments = listOf(navArgument(GameArgs.GAME_ID_ARGS) { NavType.StringType })
+        "${ROUTE}/{${GameArgs.GAME_ID_ARGS}}/{${GameArgs.GAME_ROLE}}", arguments = listOf(
+            navArgument(GameArgs.GAME_ID_ARGS) {
+                type = NavType.StringType
+            },
+            navArgument(GameArgs.GAME_ROLE) {
+                type = NavType.IntType
+            },
+            )
     ) { GameScreen() }
 }
-
 class GameArgs(savedStateHandle: SavedStateHandle) {
     val gameId: String? = savedStateHandle[GAME_ID_ARGS]
+    val role: Int? = savedStateHandle[GAME_ROLE]
 
     companion object {
         const val GAME_ID_ARGS = "gameId"
+        const val GAME_ROLE = "currentRole"
     }
 }
