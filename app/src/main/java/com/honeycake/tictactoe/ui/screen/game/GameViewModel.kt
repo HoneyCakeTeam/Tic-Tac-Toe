@@ -17,6 +17,7 @@ class GameViewModel @Inject constructor(
     private val args = GameArgs(savedStateHandle)
 
     init {
+        updateState { it.copy(myTurn = args.role!!) }
         viewModelScope.launch {
             loadData(args.gameId!!)
         }
@@ -75,9 +76,7 @@ class GameViewModel @Inject constructor(
     }
 
 
-
-
-    fun updateBoard(buttonIndex: Int){
+    private fun updateBoard(buttonIndex: Int) {
         val currentGameState = state.value.board.toMutableList()
         val currentValue = currentGameState[buttonIndex]
 
@@ -93,14 +92,38 @@ class GameViewModel @Inject constructor(
                 XORepository.updateBoard(args.gameId!!, currentGameState)
             }
         }
-
     }
 
     fun onButtonClick(buttonIndex: Int) {
         updateBoard(buttonIndex)
-
         switchPlayer()
+        if (checkWin(state.value.currentPlayer)) {
+            if (state.value.currentPlayer == state.value.myTurn){
+                updateState { it.copy(gameResult = GameResult.WIN) }
+            }else{
+                updateState { it.copy(gameResult = GameResult.LOSE) }
+            }
+        } else if (isGameTied()) {
+             updateState { it.copy( gameResult = GameResult.TIED ) }
+        }
+    }
 
+    private fun isGameTied(): Boolean {
+        return state.value.board.all { it != 0 }
+    }
 
+    private fun checkWin(playerRole: Int): Boolean {
+        val gameState = _state.value.board
+        val horizontalLines = _state.value.horizontalLines
+        val verticalLines = _state.value.verticalLines
+        val diagonalLines = _state.value.diagonalLines
+
+        for (line in horizontalLines + verticalLines + diagonalLines) {
+            if (line.all { gameState[it] == playerRole }) {
+                _state.value = _state.value.copy(winningLine = line)
+                return true
+            }
+        }
+        return false
     }
 }

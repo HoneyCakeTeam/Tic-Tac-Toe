@@ -6,13 +6,12 @@ data class GameUiState(
     val firstPlayerName: String = "",
     val firstPlayerRole: Int = R.drawable.x_icon,
     val firstPlayerImage: Int = R.drawable.gamer,
-    val isFirstPlayerWinner: Boolean = false,
     val secondPlayerName: String = "",
     val secondPlayerRole: Int = R.drawable.x_icon,
     val secondPlayerImage: Int = R.drawable.gammer2,
     val image: Int? = null,
     val enabled: Boolean = true,
-    val isSecondPlayerWinner: Boolean = false,
+    val isWinner: Boolean = false,
     val board: List<Int> = List(9) {0},
     val horizontalLines: List<List<Int>> = listOf(
         listOf(0, 1, 2),
@@ -34,4 +33,9 @@ data class GameUiState(
     val myTurn: Int = 1,
     val isFirstPlayerSelected: Boolean = false,
     val isSecondPlayerSelected: Boolean = false,
+    val gameResult: GameResult = GameResult.IDEAL
 )
+
+enum class GameResult{
+    WIN, LOSE, TIED, IDEAL
+}
