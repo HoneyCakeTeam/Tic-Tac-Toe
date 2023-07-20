@@ -30,7 +30,8 @@ data class GameUiState(
     ),
     val winningLine: List<Int>? = null,
     val isTied: Boolean = false,
-    val PlayerTurn: Int = 1,
+    val currentPlayer: Int = 1,
+    val myTurn: Int = 1,
     val isFirstPlayerSelected: Boolean = false,
     val isSecondPlayerSelected: Boolean = false,
 )
