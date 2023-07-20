@@ -79,9 +79,9 @@ fun CustomDialogUi(
             )
             Text(
                         text = when(gameResult){
-                            GameResult.WIN -> "Congratulation"
-                            GameResult.LOSE -> "Losseeeer"
-                            GameResult.TIED -> "Bad Game"
+                            GameResult.WIN -> "Congratulation👏🏻👏🏻🎉"
+                            GameResult.LOSE -> "Losseeeer😢😢"
+                            GameResult.TIED -> "Bad Game😡😡😡"
                             GameResult.IDEAL -> ""
                         },
                 textAlign = TextAlign.Center,
