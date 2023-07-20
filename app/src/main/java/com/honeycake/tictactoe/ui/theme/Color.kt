@@ -14,3 +14,4 @@ val Black_60 = Color(0x99121212)
 val Black_8 = Color(0x14121212)
 
 val White38 = Color(0x61FFFFFF)
+val White60 = Color(0x99FFFFFF)
