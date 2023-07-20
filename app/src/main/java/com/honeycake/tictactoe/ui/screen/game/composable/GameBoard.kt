@@ -40,6 +40,7 @@ fun GameBoard(
             ),
         contentAlignment = Alignment.Center
     ) {
+        Log.e("Sara",state.board.toString())
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -57,15 +58,19 @@ fun GameBoard(
                 ) {
                     for (col in 0..2) {
                         val index = row * 3 + col
-                        val buttonState = state.board[index]
-                        Log.e("TAG", "GameCell:${buttonState}")
+                        val image =when(state.board[index]){
+                            0 -> null
+                            1 -> R.drawable.x_icon
+                            else -> R.drawable.o_icon
+
+                        }
 
                         GameCell(
                             onButtonClicked = {
                                 Log.e("TAG", "GameCell:${index} ")
                                 onButtonClicked(index)
                             },
-                            imageResource = state.image,
+                            imageResource = image,
                             isEnabled = state.enabled
                         )
                     }

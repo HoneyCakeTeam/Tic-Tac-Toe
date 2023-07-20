@@ -1,5 +1,6 @@
 package com.honeycake.tictactoe.ui.screen.game
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.honeycake.tictactoe.R
@@ -31,10 +32,12 @@ class GameViewModel @Inject constructor(
                         it.copy(
                             firstPlayerName = gameSession.firstPlayerName,
                             secondPlayerName = gameSession.secondPlayerName,
-                            PlayerTurn = gameSession.currentPlayer
+                            PlayerTurn = gameSession.currentPlayer,
+                            board = gameSession.board
                         )
                     }
                 }
+                Log.e("Sara",gameSession.board.toString())
             }
         }
         getRole()
@@ -57,7 +60,7 @@ class GameViewModel @Inject constructor(
                     it.copy(
                         isFirstPlayerSelected = true,
                         isSecondPlayerSelected = false,
-                        image = R.drawable.x_icon,
+//                        image = R.drawable.x_icon,
                     )
                 }
             }
@@ -67,7 +70,7 @@ class GameViewModel @Inject constructor(
                     it.copy(
                         isSecondPlayerSelected = true,
                         isFirstPlayerSelected = false,
-                        image = R.drawable.o_icon,
+//                        image = R.drawable.o_icon,
                     )
                 }
             }
@@ -118,11 +121,13 @@ class GameViewModel @Inject constructor(
 
         if (currentValue == 0) {
             currentGameState[buttonIndex] = state.value.PlayerTurn
+            Log.e("Sara",currentGameState.toString())
 
             updateState { it.copy(board = currentGameState.toList()
                 , enabled = false) }
             viewModelScope.launch {
                 XORepository.updateBoard(args.gameId!!, currentGameState)
+//                Log.e("Sara",)
             }
         }
 
