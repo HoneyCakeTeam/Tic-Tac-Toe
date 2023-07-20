@@ -38,6 +38,7 @@ class GameViewModel @Inject constructor(
                     }
                 }
                 playerTurn()
+                checkGameState()
             }
         }
     }
@@ -97,6 +98,9 @@ class GameViewModel @Inject constructor(
     fun onButtonClick(buttonIndex: Int) {
         updateBoard(buttonIndex)
         switchPlayer()
+    }
+
+    private fun checkGameState(){
         if (checkWin(state.value.currentPlayer)) {
             if (state.value.currentPlayer == state.value.myTurn){
                 updateState { it.copy(gameResult = GameResult.WIN) }
@@ -104,7 +108,7 @@ class GameViewModel @Inject constructor(
                 updateState { it.copy(gameResult = GameResult.LOSE) }
             }
         } else if (isGameTied()) {
-             updateState { it.copy( gameResult = GameResult.TIED ) }
+            updateState { it.copy( gameResult = GameResult.TIED ) }
         }
     }
 
